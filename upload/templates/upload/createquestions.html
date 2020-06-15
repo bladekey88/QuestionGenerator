@@ -573,16 +573,17 @@
     function exportToWord() {
         
         {% if choice_field  == "tenFromEach" %}
-        const subject = (results[0]['subjectid']['subjectname'])
-        const topic = (results[0]['topicid']['topicname'])
+            const subject = (results[0]['subjectid']['subjectname'])
+            const topic = (results[0]['topicid']['topicname'])
         {% else %}
-        const subject = "{{ subject_name}}"
-        
-        // var results = [{{qm_json|safe}}]
-        var results = {{qm_json|safe}}
-        const topic = ""
+            const subject = "{{ subject_name}}"
+            
+            // var results = [{{qm_json|safe}}]
+            var results = {{qm_json|safe}}
+            const topic = ""
         {% endif %}
         
+     
         let doc = new docx.Document(
             {
                 title: subject + ":" + topic + " Worksheet",
@@ -712,7 +713,7 @@
                 ],
             })
     })
-    console.log("die)"
+
     {% if user.is_authenticated %}
 
     const rowWorksheetAnswers = results.map(function (result) {
