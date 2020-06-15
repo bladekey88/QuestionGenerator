@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+{% block title %}Profile Page{% endblock title %}
+{% load crispy_forms_tags %}
+{% block sidebar %} {% endblock sidebar %}
+
+
+
+{% block content %} 
+{% if user == user_object %}
+<div id="changeProfile" class="card card-border border-dark shadow float-center text-center">
+    <div  class="card-header text- card-border border-dark bg-default">
+        <h5 class="font-weight-bold text-capitalize">You can change your profile details here</h5>
+    </div>
+    <div class="card-border card-body text-justify">
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+        
+        <a href="{% url 'home' %}"> <button type="button" class="btn btn-danger">Cancel</button></a>
+    </form>
+</div>
+</div>
+{% else %}
+    <meta http-equiv="Refresh" content="0; URL={% url 'home' %}">
+{% endif %}
+{% endblock content %}

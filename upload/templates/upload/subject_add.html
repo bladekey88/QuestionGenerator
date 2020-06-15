@@ -1,0 +1,41 @@
+{% extends "core/base.html" %}
+
+{% block title %}Add New Subject{% endblock title %}
+
+{% block sidebar %} {% endblock sidebar %}
+
+{% block pageheading %} Add New Subject {% endblock pageheading %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+
+
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Note: </strong> Only users with the <code>editteacher</code> role can add subjects.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="card card-bordered shadow">
+    <div class="card-header text-justify text-wrap  font-weight-light">
+        Add the new 'Subject Name' below. The subject should be entered as you'd expect it to appear <em>e.g. IT, Chemistry, PE, English Literature.</em>
+    </div>
+
+
+
+    <div class="card-body">
+    <!-- {{uploader_id.id}} -->
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form | crispy }}
+    </div>
+    <div class="card-footer">
+    <input type="submit" value="Submit"  class="btn btn-primary">
+    <input type="reset" value="Reset"  class="btn btn-danger">
+    </div>
+  </form>
+</div>
+
+
+{% endblock content %}

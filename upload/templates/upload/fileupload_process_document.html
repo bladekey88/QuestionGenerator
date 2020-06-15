@@ -1,0 +1,34 @@
+{% extends "core/base.html" %}
+
+{% block title %}}Process File {% endblock title %}
+{% block sidebar %} {% endblock sidebar %}
+
+
+{% block pageheading %} Process File: {{file_name}}{{document.get_file_name}}  {% endblock pageheading %}
+
+{% block content %} 
+    {% if document %}
+    <div class="alert alert-danger  show" role="alert">
+            <h4 class="alert-heading">
+                <i class="fa fa-exclamation-triangle"></i>
+                Error - Cannot process file.</h4>
+        <strong>The file <code>{{document.get_file_name}}</code> is not available - it may have been moved or deleted.<br></strong>
+      </div>
+
+
+{% endif %}
+
+{% load crispy_forms_tags %}
+
+{% if file_name %}
+<h3>Data Preview</h3>
+    {{ data|safe }}
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <br>
+        <p> Questions and Topics will be validated against and then uploaded to <b>{{subject}}</b> </p>
+        <button type="submit">Process File</button>
+    </form>
+    {% endif %}
+{% endblock content %}

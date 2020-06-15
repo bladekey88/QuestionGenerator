@@ -1,0 +1,26 @@
+{% extends "django_sb_admin/base.html" %}{% load static %}{% block sb_admin_title %}Blank page{% endblock sb_admin_title %}
+
+{% block sb_admin_breadcrumb_active %}<li class="breadcrumb-item active">
+      Blank page
+ </li>{% endblock sb_admin_breadcrumb_active %}
+{% block sb_admin_content %}
+    <h1> File Upload</h1>
+    {{uploader_id.id}}
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    
+    <button class="btn btn-primary btn-icon-split" type="submit">
+      <span class="icon text-white-50">
+      <i class="fas fa-file-upload"></i>
+     </span>
+    <span class="text">Submit Form</span>
+  </button>
+
+  </form>
+
+  <p><a href="{% url 'upload:index' %}">Return to home</a></p>
+
+  {% endblock sb_admin_content %}
+

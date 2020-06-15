@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}Title{% endblock title %}</title>
+  </head>
+
+  <body>
+    {% if user.is_authenticated %}
+   
+    <small></small>Logged in as  {{user.get_username }}</small> 
+    {% block menu %}
+    <h3> MENU </h3>
+    <div id = "loggedinmenu"></div>
+      <p><!-- Change to { url }-->
+          <a href="{% url 'upload:index' %}">MAIN</a><br />
+          <a href="{% url 'upload:topic' %}">TOPIC Menu</a><br />
+          <a href="{% url 'upload:subject' %}">SUBJECT Menu</a><br />
+          <a href="{% url 'upload:question' %}">QUESTION Menu</a><br />
+          <a href="{% url 'upload:fileupload' %}">UPLOAD FILE</a><br />
+          <a href="{% url 'upload:fileuploadprocesslist' %}">PROCESS FILE</a>
+      </p>
+    </div>
+    {% endblock %}
+    {% endif %}
+    <main>
+    {% block content %}
+    {% endblock content %}
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    {% block javascript %}
+    {% endblock javascript%}
+  </body>
+
+  {% if user.is_staff %}
+  {% block footer%}
+  <footer>
+    <pre>Generated on {% now "Y-m-d" %} at {% now "H:i:s" %} </pre>
+    <small><a href="{% url 'admin:index' %}">Go to Admin Panel</a></small>
+  </footer>
+  {% endblock %}
+  {% endif %}
+</html>
+<!-- END -->    

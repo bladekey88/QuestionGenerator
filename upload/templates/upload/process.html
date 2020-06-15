@@ -1,0 +1,194 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %} Process Files {%endblock title%}
+
+
+{% block customcss %}
+<link href='{% static "/vendor/datatables/datatables.min.css" %}' rel="stylesheet" type="text/css">
+{% endblock customcss %}
+
+{% block sidebar %} {% endblock sidebar %}
+{% block content %}
+
+
+<div class="card card-primary shadow bg-white border-dark">
+    <div class="card-header">
+
+        <h5 class="text-uppercase text-center font-weight-bolder">
+            {% if files|length >  0 %}Files Uploaded :  {{files|length}} {% endif %}
+        </h5>
+    </div>
+    <div class="shadow card-body border-dark">
+        {% if files|length > 0 %}
+        <table class="table table-hover shadow table-responsive-lg table-sm text-center" wdith="100%" id="processFiles">
+            <thead>
+
+                <tr class='thead-dark'>
+                    <th></th>
+
+                    <th>File Name</th>
+                    <th>Subject</th>
+                    <th>Uploaded By</th>
+                    <th>Uploaded On</th>
+                    <th>Process Status</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in files %}
+                <tr>
+                    <td>
+                        <h5>
+                            {% if f.document_id in invalid %}
+
+                            <span class="badge badge-pill badge-danger">
+                                <i class="fas fa-times"></i>
+                            </span>
+
+                            {% elif f.document_id not in docs %}
+
+                            <span class="badge badge-pill badge-primary">
+                                <i class="fas fa-exclamation"></i>
+                            </span>
+
+
+                            {% endif %}
+                        </h5>
+                    </td>
+
+                    <td>{{f.get_file_name}}</td>
+                    <td>{{f.subject}}</td>
+                    <td>{{f.uploaded_by|title}}</td>
+                    <td>{{f.uploaded_at}} </td>
+
+                    <td style="padding: 5px; text-align: center;">
+
+                        {% if f.document_id in invalid %}
+                        <span class="btn btn-danger btn-block disabled">Errored</span>
+                        {% elif f.document_id in docs %}
+                        <span class="btn btn-success btn-block disabled">Document Processed</span>
+                        {% else %}
+                        <a href="{% url 'upload:fileuploadprocess' f.document_id %}"
+                            class="button btn-block btn btn-primary">Ready<br><small>Click Here to
+                                Process</small></small></a>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 5px; text-align: center;">
+                        <button id="file{{f.document_id}}" class="delete-file btn btn-sm btn-outline-dark>">
+                            <a href="#{{f.document_id}}" data-toggle="modal" data-target="#deleteFileModal">
+                                <i class="far fa-2x fa-trash-alt"></i>
+                            </a>
+                        </button>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% else %}
+        <div class="text-center font-weight-bolder border-info alert alert-info">
+            No Files Uploaded
+        <br><br>
+        <a href="{% url 'upload:fileupload' %}">
+            <button type="button" class="btn btn-primary">
+               Upload A File
+            </button>
+
+        </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="card-footer bg-default  text-center border-dark">
+        <a href="{% static '/vendor/questiongenerator/Sample.xlsx' %}">
+        <button type="button" class="btn  btn-block active btn-success border-dark">
+            <i class="fas fa-file-excel"> </i>&nbsp;&nbsp;Download Upload Template (.xlsx)                
+        </button>
+        </a>
+    </div>    
+</div>
+
+
+{% endblock content %}
+
+
+
+{% block footer %}
+<!-- Logout Modal-->
+<div class="modal fade" id="deleteFileModal" tabindex="-1" role="dialog" aria-labelledby="deleteFileModal"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title text-center" id="exampleModalLabel">Confirm Deletion</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="text-justify  modal-body">
+                <h5>Are you sure you wish to delete this file?</h5><br>
+                <p>Deleting the file <b>does not</b> remove the questions if they have already been processed.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" class="cancel" type="button" data-dismiss="modal">Cancel</button>
+                <a id="btnDeleteFile" class="btn btn-danger" href="{% url 'upload:file_delete' fileid=0 %}">Delete
+                    File</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock footer %}
+
+
+{% block footerjs %}
+<script src='{% static "/vendor/datatables/datatables.min.js" %}'></script>
+<script src='{% static "/vendor/datatables/DataTables-1.10.20/js/dataTables.bootstrap4.min.js" %}'></script>
+
+<script>
+    $(document).ready(function () {
+        $('#processFiles').DataTable({
+
+            fixedHeader: true,
+            responsive: false,
+            "paging": true,
+            'pageLength': 20,
+            "pagingType": "full_numbers",
+            "ordering": true,
+            "info": true,
+            "order": [[0, "desc"], [5, 'desc'], [4, 'desc']],
+            "language": {
+                "lengthMenu": "Display _MENU_ records per page",
+                "zeroRecords": "No Files Available for Processing",
+                "info": "Page _PAGE_ of _PAGES_",
+                "infoEmpty": "You have not uploaded any files successfully",
+                "infoFiltered": "(filtered from _MAX_ total records)"
+            },
+            "columnDefs": [
+                {
+                    "targets": [0, 6, 3],
+                    "orderable": false,
+                    "searchable": false
+                },
+            ],
+
+            "dom": "<'row'<'col-md-6'><'col-md-6'f>><'row'<'col-md-12't>><'row'<'col-md-6'i><'col-md-6'p>>"
+            // "dom": "<'row'<'col-md-6'l><'col-md-6'f>><'row'<'col-md-6'B><'col-md-6'p>><'row'<'col-md-12't>><'row'<'col-md-12'i>>"
+        });
+    });
+
+</script>
+
+<script>
+    $('.delete-file').on("click", function () {
+        let file_id = $(this).attr("id").replace(/[^0-9]+/, "")
+        let file_delete_link = $("#btnDeleteFile").attr("href")
+        $("#btnDeleteFile").attr("href", file_delete_link.replace(file_delete_link[file_delete_link.search("0")], file_id))
+    })
+</script>
+
+
+{% endblock footerjs %}

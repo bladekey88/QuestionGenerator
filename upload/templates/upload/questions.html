@@ -1,0 +1,42 @@
+{% extends "core/base.html" %}
+
+{% block title %}Questions{% endblock title %}
+
+{% block sidebar %} {% endblock sidebar %}
+
+{% block pageheading %}Question Subjects{% endblock pageheading %}
+
+{% block content %}
+
+
+  
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Subject</th>
+        <th scope="col">Questions</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for q in question_count %}
+      <tr>
+        <td>{{q.subjectid}}</td>
+        <td>{{q.subjectid__subjectname}}</td>
+        <td>{{q.dcount}}</td>
+        <td><a href="{% url 'upload:questionlist' subjectname=q.subjectid__subjectname %}">View Questions</a></td>
+      </tr>
+      {% endfor %}
+
+      
+    </tbody>
+  </table>
+
+
+
+
+
+
+{% endblock content %}
+

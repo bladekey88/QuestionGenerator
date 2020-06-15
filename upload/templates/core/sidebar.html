@@ -1,0 +1,136 @@
+{% block sidebar %}
+<!-- Sidebar -->
+<ul class="navbar-nav bg-sidebar-gradient sidebar-custom sidebar sidebar-dark accordion toggled" id="accordionSidebar">
+  
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'home' %}">
+      <div class="sidebar-brand-icon rotate-n-15">
+        <i class="fas fa-user-graduate"></i>
+      </div>
+      <div class="sidebar-brand-text mx-3">Question Generator <sup>2</sup></div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item" >
+      <a class="nav-link" href="{% url 'home' %}">
+        <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>Dashboard</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    
+    <!-- Heading -->
+    <div class="sidebar-heading">
+      Main 
+    </div>      
+
+    <li class="nav-item">
+      <a class="nav-link collapsed"  href="{% url 'upload:subject_add' %}">
+        <i class="fas fa-fw fa-random"></i>
+        <span>Generate Questions</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="https://3.11.69.77/help">
+        <i class="fas fa-fw fa-question-circle"></i>
+        <span>Help</span>
+      </a>
+      
+    </li>
+  {% if perms.upload.view_question %}
+    
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    
+    <!-- Heading -->
+    <div class="sidebar-heading">
+      Management  
+    </div>
+
+    <!-- Nav Item - Subject Collapse Menu -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSubject" aria-expanded="true" aria-controls="collapseSubject">
+        <i class="fas fa-fw fa-book"></i>
+        <span>Subjects</span>
+      </a>
+      <div id="collapseSubject" class="collapse  aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">Subject Menu:</h6>
+          <a class="collapse-item" href="{% url 'upload:subject' %}">View Subjects</a>
+          <a class="collapse-item" href="{% url 'upload:addsubject' %}">Add Subject</span></a>
+        </div>
+      </div>
+    </li>
+    
+    <!-- Nav Item - Topics Collapse Menu -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTopic" aria-expanded="true" aria-controls="collapseTopic">
+        <i class="fas fa-fw fa-list"></i>
+        <span>Topics</span>
+      </a>
+      <div id="collapseTopic" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">Topic Menu:</h6>
+          <a class="collapse-item" href="{% url 'upload:topic' %}">View Topics</a>
+          {% if request.resolver_match.view_name == 'upload:topic-detail' %} <a class="collapse-item active" href="#">View Topics Details</a>{% endif %}
+          <a class="collapse-item" href="{% url 'upload:addtopic' %}">Add Topic</a>
+        </div>
+      </div>
+    </li>
+    
+    <!-- Nav Item - Questions Collapse Menu -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseQuestion" aria-expanded="true" aria-controls="collapseQuestion">
+        <i class="fas fa-fw fa-question"></i>
+        <span>Questions</span>
+      </a>
+      <div id="collapseQuestion" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">Question Menu:</h6>
+          <a class="collapse-item" href="{% url 'upload:question' %}">View Questions</a>
+          <a class="collapse-item" href="#">Add Question  <span class="badge badge-dark">Coming Soon</span></a>
+        </div>
+      </div>
+    </li>
+    <!-- Nav Item - File Collapse Menu -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFile" aria-expanded="true" aria-controls="collapseFile">
+        <i class="fas fa-fw fa-file-upload"></i>
+        <span>Files</span>
+      </a>
+      <div id="collapseFile" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">File Menu:</h6>
+          <a class="collapse-item " href="{% url 'upload:fileupload' %}">Upload  Files</a>
+          <a class="collapse-item" href="{% url 'upload:fileuploadprocesslist' %}">View File Details </a>
+        </div>
+      </div>
+    </li>
+
+    
+
+    {% endif %}
+    
+
+
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+      <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+    {% endblock sidebar %} 
+  </ul>
+  <!-- End of Sidebar -->
+
+  {% comment %}
+  {% if 'file' in request.resolver_match.view_name  %}active{% endif %}
+  {% if request.resolver_match.view_name == 'upload:fileupload' %}active{% endif %}" href="{% url 'upload:fileupload' %}
+  {% endcomment %}

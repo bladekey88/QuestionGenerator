@@ -1,0 +1,35 @@
+    {% extends "django_sb_admin/base.html" %}
+    {% load static %}
+    {% block sb_admin_title %}}Home | Question Generator{% endblock sb_admin_title %}
+
+
+    {% block sb_admin_breadcrumb_active %}<li class="breadcrumb-item active">
+        Home
+
+    </li>{% endblock sb_admin_breadcrumb_active %}
+
+    {% block sb_admin_content %}
+
+    <h4>Random Question Selector  - All Subjects </h4>
+    {% if randomQuestion  %}
+    <p> ==== Number of Questions Generated -  {{randomQuestion|length}}  ====</p>
+    
+    
+    <ol>
+        {% for question in randomQuestion %}
+            <p>
+                <li>
+                    <pre><i>{{question.3|upper}} -  {{question.2|title }}  </i></pre>
+                    <b>Q)</b> {{ question.0|capfirst}}<br>            
+                    <b>A)</b> {{ question.1|capfirst}}
+                    
+                </li>
+            </p> 
+        {% endfor %}
+    </ol>
+    {% else %}
+    <h3> No questions are available.</h3>
+    {% endif %}
+</body>
+{% endblock sb_admin_content %}
+

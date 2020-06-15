@@ -1,0 +1,112 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Questions for {{question.0.subjectid}}{% endblock title %}
+
+{% block customcss %}
+<link href='{% static "/vendor/datatables/datatables.min.css" %}' rel="stylesheet" type="text/css">
+{% endblock customcss %}
+
+{% block sidebar %} {% endblock sidebar %}
+
+{% block pageheading %} {{question.0.subjectid}} Questions  {% endblock pageheading %}
+
+
+{% block content %}
+
+<!-- <div class="card shadow border-secondary mb-4">
+    <div class="card-header py-3">
+        <h5 class="font-weight-bold text-primary">Questions </h6>
+        <h6 class="card-subtitle mt-2 mb-2 text-muted">There are {{question|length}} questions</h6>
+    </div>
+    
+    <div class="card-body text-primary text-dark">
+        <ol>
+            {% for q in question %}
+            <li>
+                <a href="{% url 'upload:question' %}{{q}}">{{q.questiontext}}</a>
+            </li>
+            {% endfor %}
+        </ol>
+    </div>
+</div>  -->
+
+<div class="card shadow border-secondary mb-4">
+    <div class="card-header py-3">
+        <h5 class="font-weight-bold text-primary">Questions </h6>
+            <h6 class="card-subtitle mt-2 mb-2 text-muted">There are {{question|length}} questions</h6>
+    </div>
+    <div class="card-body text-primary text-dark">
+        <table id="subject-questions" class="table table-striped display cell-border stripe hover order-column cell-border" style="width:100%">
+            <thead>
+                <tr>
+                    <th data-class-name="priority">#</th>
+                    <th>Question</th>
+                    <th>Answer</th>
+                    <th>Topic</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for q in question %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{q.questiontext}}</td>
+                    <td>{{q.questionanswer}}</td>
+                    <td><a href="{% url 'upload:topic-detail' topicid=q.topicid_id %}">{{q.topicid}}</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- END -->    
+{% endblock content %}
+
+
+{% block footerjs %}
+<script src='{% static "/vendor/datatables/datatables.min.js" %}'></script>
+<script src='{% static "/vendor/datatables/DataTables-1.10.20/js/dataTables.bootstrap4.min.js" %}'></script>
+
+<script>
+    $(document).ready(function() {
+    $('#subject-questions').DataTable( {
+        colReorder: true,
+        fixedHeader: true,
+        responsive: true,   
+        "paging":   true,
+        "lengthMenu": [[10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+        "pagingType": "full_numbers",
+        "ordering": true,
+        "info":     true,
+        "order": [[ 0, "asc" ]],
+        "language": {
+            "lengthMenu": "Display _MENU_ records per page",
+            "zeroRecords": "Nothing found - sorry",
+            "info": "Showing page _PAGE_ of _PAGES_",
+            "infoEmpty": "No records available",
+            "infoFiltered": "(filtered from _MAX_ total records)"
+        },
+        "columnDefs": [
+            {
+                "targets": [ 2 ],
+                "visible": false,
+                "searchable": false
+            },
+        ],
+        dom: 'Bfrtip',
+        buttons: [
+        'copy', 'excel', 'pdf','pageLength',
+        {
+            extend: 'colvis',
+            columns: 2,
+            text: 'Toggle Answers',
+        },
+        ],
+    } );
+} );
+
+</script>
+
+
+{% endblock footerjs %}
+

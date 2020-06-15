@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+
+
+ {% block title %} Subjects {% endblock title %}     
+
+
+{% block pageheading %} Subjects Available {% endblock pageheading %}
+
+
+{% block content %}
+<div class="card card-border border-dark shadow">
+    <div class="card-header text-uppercase ">
+        <h6 class="text-center font-weight-bolder ">There are {{subjects|length}} subjects</h6>
+    </div>
+<div class="card-body bg-white text-uppercase text-center float-center">
+{% for s in subjects %}  
+    {% if forloop.counter0|divisibleby:4 %}
+    <div class="card-deck">
+    {% endif %}
+
+
+        <div class="ml-4 mb-1 card border-dark text-center" style="max-width: 15rem;">
+            <div class="card-body">
+              <h5 class="card-title"><a href='{{ s.subjectid }}'>{{s.subjectname|upper}}</a></h5>
+            </div>  
+
+        </div>
+        
+        {% if forloop.counter|divisibleby:4 %}
+        </div><br>
+    {% endif %}
+{% endfor %}
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Upload Status {%endblock title%}
+
+{% block sidebar %} {% endblock sidebar %}
+
+
+{% block pageheading %} Upload Status {% endblock pageheading %}
+
+{%block content%}
+    
+{% if error_message %}
+<div class="alert alert-danger  show" role="alert">
+    <strong>Error -  </strong> {{ error_message }}
+  </div>
+
+{%endif%}
+
+    {% if full_url %}
+    <div class="alert alert-success  show" role="alert">
+        <strong>File Uploaded Succesfully</strong> - File uploaded at: <a href="/{{ full_url }}">{{ full_url }}</a>
+        <hr>
+        <p><a href="{% url 'upload:fileuploadprocesslist'  %}">Click here to process the file</a>
+        <b> or </b><a href="{% url 'upload:fileupload' %}">Upload Another File</a></p>
+        
+    </div>
+  {% endif %}
+      
+
+
+   
+    
+        
+    
+    
+  
+
+{%endblock%}

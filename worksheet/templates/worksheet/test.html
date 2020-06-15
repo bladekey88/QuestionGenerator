@@ -1,0 +1,123 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block sidebar %}{% endblock %}
+{%block content%}
+
+{% block customcss %}
+<style>
+
+
+
+input[type="radio"] {
+   opacity: 0;
+}
+
+.custom-control {
+    padding-left: 0;
+}
+.custom-radio label { 
+    display: inline-block;
+    padding: 10px 20px;
+    font-family: sans-serif, Arial;
+    font-size: 16px;
+    border: 2px solid #444;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #fffdd0;
+
+}
+
+.custom-radio input[type="radio"]:checked + label {
+    background-color:rgb(25, 91, 146);
+    border-color: rgb(28, 131, 28);
+    color: white;
+    border: 3px solid #000;
+}
+
+.custom-radio input[type="radio"]:checked + label::after {
+    content:"SELECTED";
+    font-weight: bold;
+    font-size: 10pt;
+    text-align: center;
+    background: white;
+    color:rgb(28, 131, 28);
+    padding: 4px;
+    margin-left: 35%;
+
+}
+
+.custom-radio input[type="radio"]:focus + label {
+    border: 3px dashed red;    
+}
+
+.custom-radio label:hover {
+  background-color: rgb(130, 184, 228);
+  border: 1px dashed gold;
+  color: white;
+}
+
+hr{
+    border-top: 1px solid;
+}
+
+
+
+
+
+
+ 
+
+</style>
+{% endblock %}
+<div id="optionGroup" class="card shadow bg-white mb-3 border-dark">
+    <div class="card-header border-dark bg-dark">
+       <h6 class="text-white text-uppercase text-center">Select an option for question generation</h6>
+    </div>
+    <div class="card-body">
+       <form>
+          <div class="form-group flex-fill">
+             <div class="container">
+                <div class="row">
+                   <div class="col-md-4" id="radioColumn">
+                      <div class="custom-control custom-radio">
+                         <input required type="radio" id="customRadio1" name="customRadio" class="form-check-input">
+                         <label class="form-check-label" for="customRadio1">
+                            <h5 class="text-center">1 Question From Each Selected Topic</h5>
+                            <hr>
+                            <p class="text-center font-weight-lighter">Selecting this option will return one randomly selected question from each topic chosen. If a topic only has one question associated to it, then that question will always be returned.</p>
+                         </label>
+                      </div>
+                   </div>
+                   <div class="col-md-4" id="radioColumn">
+                      <div class="custom-control custom-radio">
+                         <input type="radio" id="customRadio2" name="customRadio" class="form-check-input">
+                         <label class="form-check-label" for="customRadio2">
+                            <h5 class="text-center">10 Questions From A Selected Topic</h5>
+                            <hr>
+                            <p class="text-center font-weight-lighter">Selecting this option will return ten randomly selected questions. You can quickly change topics on the results page.<strong>You do <b>not</b> need to select a topic to continue.</strong></strong></p>
+                         </label>
+                      </div>
+                   </div>
+                   <div class="col-md-4" id="radioColumn">
+                      <div class="custom-control custom-radio">
+                         <input type="radio" id="customRadio3" name="customRadio" class="form-check-input">
+                         <label class="form-check-label" for="customRadio3">
+                            <h5 class="text-center"><em>x</em> Questions From Any Selected Topic</h5>
+                            <hr>
+                            <p class="text-center font-weight-lighter">Selecting this option will return a variable amount of randomly selected questions from any of the topics chosen. The maximum number of questions that can be returned is 10.</p>
+                         </label>
+                      </div>
+                   </div>
+                </div>
+             </div>
+          </div>
+          <input type="submit" class="btn btn-outline-primary btn-block" value="Submit">
+          <input type="reset" class="btn btn-outline-danger btn-block disabled" value="Reset">
+       </form>
+    </div>
+ </div>
+
+
+
+{% endblock %}

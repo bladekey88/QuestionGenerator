@@ -1,0 +1,55 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Message{% endblock title %}
+
+
+{% block sidebar %} {% endblock sidebar %}
+
+{% block pageheading %}Message{% endblock pageheading %}
+
+{% block content %}
+
+<div id = 'message'>
+    <h5 style='color:black; margin-left: 1rem; font-size: medium; text-underline-offset: 0.77rem;'>
+        <a href="{% url 'messaging:inbox' %}">Inbox</a>
+        &nbsp;&nbsp;&nbsp;
+        <a href="{% url 'messaging:outbox' %}">Outbox</a>
+       
+    </h5>
+
+    <div class="card  text-dark mb-3" >
+        <div class="card-header border-dark d-flex justify-content-between " style='font-size: medium;'>
+            <div>
+                From: {{privateMessage.from_id.first_name}} {{privateMessage.from_id.last_name}} ({{privateMessage.from_id}})<br>
+                To: {{privateMessage.to_id.first_name}} {{privateMessage.to_id.last_name}} ({{privateMessage.to_id}})<br>
+                Subject: {{privateMessage.message_subject}}
+            </div>
+            <div>
+                {{privateMessage.message_date}}
+            </div>
+
+    </div>
+        <div class="card-body border-dark">
+          <p class="card-text lead">{{ privateMessage.message_body| safe| linebreaks }}</p>
+        </div>
+        <div class="card-footer border-dark d-flex" style='font-size: medium;'>
+            <button type="button" class="btn btn-large btn-outline-primary">Mark as Read</button>
+            &nbsp;
+            <a href="{% url 'messaging:deletemessage' message_id=privateMessage %}">
+                <button type="button" class="btn btn-large btn-primary">
+                    Delete Message
+                </button>
+            </a>
+        </div>
+      </div>
+
+
+</div>
+
+
+  
+
+
+{%  endblock content %}
+

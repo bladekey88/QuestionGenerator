@@ -1,0 +1,62 @@
+{% extends "core/base.html" %}
+{% block title %}Topic - {{topic.topicname}}{% endblock title %}
+
+
+
+{% block sidebar %} {% endblock sidebar %}
+
+{% block pageheading %} Topic:  {{topic.topicname}}  {% endblock pageheading %}
+
+
+{% block content %}
+<p>{{perms.user}}</p>
+<!-- This will be moved to header.html and included in the template at a later date -->
+<div class="card shadow border-info mb-4">
+          <div class="card-header py-3">
+            <h5 class="font-weight-bold text-primary">Topic Details
+                {% if perms.upload.add_topic %}<a class="float-right" href="{% url 'upload:edittopic' topicid=topic.topicid %}"><button class="btn btn-sm btn-primary">Edit Topic </button></a>{% endif %}
+            </h5>
+          </div>
+          <div class="card-body text-dark">
+            <div class="row">
+                <div class="col-sm mt-2 mb-2"><p class='lead'>Topic ID:</p></div>
+                <div class="col-sm  mt-2 mb-2"> <p class="text-justify  font-weight-bold">{{topic.topicid}}</p></div>
+          </div>
+          <div class="row">
+            <div class="col-sm mt-2 mb-2"><p class='lead'>Topic Name:</p></div>
+            <div class="col-sm  mt-2 mb-2"> <p class="text-justify  font-weight-bold">{{topic.topicname}}</p></div>
+         </div>
+         <div class="row">
+            <div class="col-sm mt-2 mb-2"><p class='lead'>Linked to Subjects:</p></div>
+            <div class="col-sm  mt-2 mb-2"> 
+                {% for s in subject %}
+                    {% if question|length > 0 %}
+                    <p><a href="{% url 'upload:subject' %}{{s.0}}">{{s.1|upper}}</a></p>
+                    {% endif %}
+                {%endfor %}
+            </div>
+        </div>  
+    </div>       
+</div>
+
+
+{% if perms.upload.view_questions %}
+<div class="card shadow border-secondary mb-4">
+          <div class="card-header py-3">
+            <h5 class="font-weight-bold text-primary">Linked to Questions: </h6>
+            <h6 class="card-subtitle mt-2 mb-2 text-muted">{{topic.topicname|capfirst}} is linked to {{question|length}} questions</h6>
+          </div>
+          <div class="card-body text-primary text-dark">
+            
+            <ol>
+                {% for q in question %}
+                    <li>
+                        <a href="{% url 'upload:questionlist' subjectname=q.subject %}">{{q.questiontext}} (Subject: {{q.subject}})</a>
+                    </li>
+                {% endfor %}
+            </ol>
+            </div>
+        </div> 
+{% endif %}
+<!-- END -->    
+{% endblock content %}

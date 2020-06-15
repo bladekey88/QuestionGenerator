@@ -1,0 +1,35 @@
+{% extends "core/base.html" %}
+
+{% block title %}Topics{% endblock title %}
+
+
+{% block pageheading %} Topics Available {% endblock pageheading %}
+
+
+{% block content %}
+<div class="card card-border border-dark shadow">
+    <div class="card-header text-uppercase ">
+        <h6 class="text-center font-weight-bolder ">There are {{topics|length}} subjects</h6>
+    </div>
+    <div class="card-body bg-white text-uppercase text-center float-center">
+        {% for t in topics %}  
+        {% if forloop.counter0|divisibleby:4 %}
+        <div class="card-deck">
+        {% endif %}
+
+        <div class="ml-4 mb-1 card border-dark text-center" style="max-width: 15rem;">
+
+                <div class="card-body">
+                <h5 class="card-title">{{t.topicname|upper}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'upload:topic' %}{{t.topicid}}">View Topic Information </a></h6>
+                </div>
+
+            </div>
+            
+            {% if forloop.counter|divisibleby:4 %}
+            </div><br>
+        {% endif %}
+    {% endfor %}
+</div>
+</div>
+{% endblock %}

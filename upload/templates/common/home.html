@@ -1,0 +1,208 @@
+<!-- home.html -->
+{% extends 'core/base.html' %}
+
+
+{% block title %}Home Page{% endblock title %}
+
+
+{% block sidebar %} {% endblock sidebar %}
+
+{% block pageheading %} Home {% endblock pageheading %}
+
+
+{% block content %} 
+<div class="row">
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Subjects</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">{{subjects}}<br> <a href="{% url 'upload:subject' %}"><small>Click here to view</small></a></div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-book fa-fw fa-3x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-success shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Topics</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">{{topics}} <br><a href="{% url 'upload:topic' %}"><small>Click here to view</small></a></div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-fw fa-list fa-3x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-info shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Questions</div>
+            <div class="row no-gutters align-items-center">
+              <div class="col-auto">
+                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{questions}} <br><a href="{% url 'upload:question' %}"><small>Click here to view</small></a></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-fw fa-question-circle fa-3x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-warning shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Files</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">{{files}} <br><a href="{% url 'upload:fileuploadprocesslist' %}"><small>Click here to view<br>(requires login)</small></a></div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-fw fa-file fa-3x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- end div row-->
+</div>
+
+
+
+
+    
+    {% if user.is_authenticated %}
+    <div class="row">
+
+      <div class="col-sm-6">
+
+        <!-- Circle Buttons -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">User Details</h6>
+          </div>
+          <div class="card-body text-dark">
+            <div class="row">
+            <div class="col-sm mt-2 mb-2 text-capitalize">Your name is:</div>
+            <div class="col-sm  mt-2 mb-2 text-capitaliz"> <span class="text-justify font-weight-bold">{{user.first_name}} {{user.profile.middlename}} {{user.last_name}}</span></div>
+          </div>
+          <div class="row">
+            <div class="col-sm  mt-2 mb-2">Your email address is:</div>
+            <div class="col-sm mt-2 mb-2"> <span class="text-justify font-weight-bold">{{user.email}}</span></div>
+          </div>
+          <div class="row">
+            <div class="col-sm mt-2 mb-2">Groups:</div>
+            <div class="col-sm mt-2 mb-2"> <span class="text-justify font-weight-bold">{% for group in user.groups.all %}
+              {% if request.user.is_superuser %}
+              <code>Super User</code>
+              {% else %}
+                <code>{{group.name|title}}</code>
+                {% endif %}
+                {% empty %}
+                None
+              
+              {% endfor %}</span></div>
+          </div>
+          </div>
+        </div>
+
+        
+          <!-- Circle Buttons -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Useful Links</h6>
+          </div>
+          <div class="card-body text-dark">
+            <div class="row">
+              <div class="col-sm mt-2 mb-2"><a href="{% url 'upload:subject_add' %}">Question Generator</a></div>
+            </div>
+            <div class="row">
+              <div class="col-sm mt-2 mb-2"><a href="{% url 'upload:fileupload' %}">Upload Question File</a><small> - Must be in the <code>editteacher</code> group</small></div>
+            </div>
+            
+              
+            </div>
+          </div>
+          </div>
+      
+
+
+
+   
+
+      <div class="col-sm-6">
+
+        <!-- Circle Buttons -->
+        <div class="card shadow mb-4">
+          <a href="#cardPermissions" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="cardPermissions">
+
+            <h6 class="m-0 font-weight-bold text-info">Permissions</h6>
+          </a>
+          <div class="collapse show" id="cardPermissions">
+          <div class="card-body text-dark">
+            <div class="row">
+              <div class="col mt-2 mb-2">Group Permissions: 
+                <div class="mt-2 mb-2 font-weight-bold">
+                <ul>
+                {% for permissions in user.get_group_permissions %}
+                    {% if "upload" in permissions %}
+                        <li> {{permissions}} </li>
+                    {%endif%}
+                {% empty %}
+                    <li> No Group Permissions Set </li>
+                {% endfor %}
+                </ul>
+                </div>
+              </div>
+              <div class="col mt-2 mb-2">Account Permissions: 
+                <div class="mt-2 mb-2 font-weight-bold">
+                <ul>                
+                    {% for permission in user.user_permissions.all %}
+                        <li> {{permission}} </li>
+                    {% empty %}
+                        <li> No Account Permissions Set </li>            
+                    {% endfor %}
+                
+                </ul>
+                </div>
+              </div>
+
+        </div>
+      </div>
+        </div>
+        </div>
+      </div>
+
+
+   
+    
+   
+      </div>
+     
+    
+    {% else %}
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">
+          <a href="{% url 'login' %}">Login</a>
+        </h6>
+    
+    {% endif %}
+{% endblock content %}

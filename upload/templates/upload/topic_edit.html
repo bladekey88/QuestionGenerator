@@ -1,0 +1,42 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{topic}}{% endblock title %}
+
+{% block pageheading %}Topic Details{% endblock pageheading %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+
+
+<div class="card card-bordered shadow">
+    <div class="card-header text-justify text-wrap  font-weight-light">
+      {% if perms.upload.change_topic%}Edit Topic  Details{% else %}Topic Details{% endif %}
+  </div>
+  
+  <div class="card-body">
+  {% if perms.upload.change_topic%}
+  <h6 class="alert alert-info"><i class="fa fa-info-circle"></i>&nbsp;&nbsp;&nbsp;The topic should be entered as you'd expect it to appear <em>e.g. C1, Shakespare, Algebra, etc.</em></h6>
+
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form | crispy }}
+    </div>
+  <div class="card-footer">
+    <input type="submit" value="Update"  class="btn border-dark btn-primary">
+    <input type="reset" value="Reset"  class="btn btn-info border-dark">
+    <a href='{% url "upload:deletetopic" topicid=topicid %}'><button type="button" class="btn border-dark bg-danger text-white visible">Delete</button></a>
+
+      </div>
+  </form>
+  {% else %}
+  <label for="subjectname">Topic Name</label>
+  <input type="text" id="topicname" class="form-control" aria-readonly="true" readonly value="{{topicname}}">
+  </div>
+
+
+  {% endif %}
+</div>
+
+
+
+{% endblock content %}

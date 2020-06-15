@@ -1,0 +1,196 @@
+{% load static %}
+
+
+
+    
+  
+        <div class="alert alert-primary" role="alert">
+            <h6 class="text-center text-dark font-weight-bolder"> 
+              <i class="fa fa-info-circle fas"></i>
+              The Subject has {{question_count}} 
+              
+              {% if question_count == 1 %}
+              Question
+              {% else %}
+              Questions
+              {% endif %}
+            </h6>
+          </div>
+        {% if question_count > 0 %}
+        <div class="card border-dark shadow">
+          <a href="#cardGraph" class="card-header border-secondary font-weight-bold text-dark" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="cardGraph"> Number of Question in Each Topic For Subject</a>
+
+          <div class="collapse show" id="cardGraph">
+          <div class="card-body">
+            <h5 class="card-title">
+              <button id='buttonBar' type='button' class='btn btn-success '>Bar Chart</button>
+              <button id='buttonPie' type='button' class='btn btn-success '>Pie Chart</button>
+              <button id='buttonDoughnut' type='button' class='btn btn-success'>Doughnut Chart</button>
+
+            </h5>
+            <p class="card-text"><canvas id="myChart"  aria-label = "Test Graph" role="figure"></canvas></p>
+          </div>
+        </div>
+        </div>
+        <br>
+        
+        
+
+
+  <div class="card border-dark shadow">
+    <div class="card-header border-dark font-weight-bold text-dark">
+    Select the Topics to be Included in Question Generation   
+    <button type="button" id="clearAll" class="ml-2 border-dark shadow text-dark btn btn-sm btn-warning float-right">Clear All</button>
+    <button type="button" id="selectAll" class="btn border-dark shadow  btn-info btn-sm float-right">Select All</button>
+    </div>
+    <div class="card-body">
+      <ul class="list-unstyled card-columns">
+        <div class="checkbox-group required">
+{% for topic in topics %}
+   <li><input type="checkbox" class="chkbox" name="topicid[]" id="{{topic.0}}" value="{{topic.0}}">
+    <label for="{{topic.0}}">{{topic.1}}</label><br></li>
+{% endfor %}
+    </div>
+    </ul>
+    <h5 id="optionDisabled" class="text-danger bg-white  text-center font-weight-bold">DISABLED DUE TO SELECTED OPTION BELOW</h5>
+  </div>
+</div>
+
+{% endif %}
+
+{% block footerjs %}
+<script src='{% static "/vendor/chartjs/chartjs.min.js" %}'></script>
+<script>
+
+function getRandomColor() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+    
+    var graphLabels = {% autoescape off %} [{{ top_topics }}] {% endautoescape  %};
+    var graphTotals = {{totals}};
+    var ctx = document.getElementById('myChart');
+    var graphSize = graphTotals.length;
+    if (graphSize ==0) {throw new Error("No Bar Data. Halting Script");}
+    var bgColor = new Array();
+    for (var i = 0; i <  graphSize; i++ )
+    {
+       bgColor.push(getRandomColor());
+    }
+    console.log ([bgColor]);
+
+    var chartData  = {
+            
+            labels : graphLabels,
+ 
+            datasets: [{
+                label: '',
+                data: graphTotals,                
+                borderWidth: 3, 
+                backgroundColor: bgColor,
+            }]
+        }; 
+    console.log(chartData);
+    
+    var config = {
+        type: 'bar',
+        data : chartData,
+        options: {
+          legend: {
+            display: false,
+          },
+            title: 
+            {
+                text: 'Number of Questions per Topic ',
+                display: true,
+                legend: {display:false,}
+            },
+            responsive: true,        
+        }
+    }
+    
+    
+    
+    var myChart = new Chart(ctx, config);
+    
+    </script>
+
+<script>
+    document.getElementById('buttonDoughnut').onclick = function() 
+    {   $("button").removeAttr('disabled');
+        $("#buttonDoughnut").attr('disabled',true);
+        
+        myChart.destroy();
+        myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: chartData,
+            options: {
+                legend: {
+            display: true,
+        },   
+            title: 
+            {
+                text: 'Number of Questions per Topic',
+                display: true,
+            },
+        }
+            
+        });
+    };    
+    </script>
+
+<script>
+    document.getElementById('buttonBar').onclick = function() 
+    {   $("button").removeAttr('disabled');
+        $("#buttonBar").attr('disabled',true);
+        
+        myChart.destroy();
+        myChart = new Chart(ctx,config)
+    };    
+    </script>
+
+
+<script>
+    document.getElementById('buttonPie').onclick = function() 
+    {   $("button").removeAttr('disabled');
+        $("#buttonPie").attr('disabled',true);
+        
+        myChart.destroy();
+        myChart = new Chart(ctx, {
+            type: 'pie',
+            data: chartData,
+            options: {
+              legend: {
+                display: true,
+              },
+              title: 
+              {
+                  text: 'Number of Questions per Topic',
+                  display: true,
+              },
+        }
+            
+        });
+    };    
+    </script>
+
+
+<script>
+  document.getElementById('selectAll').onclick = function() 
+    {
+      $('input:checkbox').prop('checked', true);
+  }
+
+  document.getElementById('clearAll').onclick = function() 
+    {
+      $('input:checkbox').prop('checked', false);
+  }
+
+</script>
+
+{% endblock footerjs %} 
+

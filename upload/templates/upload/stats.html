@@ -1,0 +1,157 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block title %} Process Files {%endblock title%}
+
+
+{% block customcss %}
+    <link href='{% static "/vendor/chartjs/chartjs.min.css" %}' rel="stylesheet" type="text/css">
+{% endblock customcss %}
+
+{% block sidebar %} {% endblock sidebar %}
+
+
+{% block content %}
+<button id='buttonDoughnut' type='button' class='btn btn-success '>Donught Chart</button>
+<button id='buttonPie' type='button' class='btn btn-success '>Pie Chart</button>
+<button id='buttonBar' type='button' class='btn btn-success'>Bar Chart</button>
+<div class='card card-body shadow border-secondary' id="testChart" style="position: relative;" >
+    
+    <canvas id="myChart"  aria-label = "Test Graph" role="figure"></canvas>
+
+    
+</div>
+
+{% endblock content %}
+
+{% block footerjs %}
+<script src='{% static "/vendor/chartjs/chartjs.min.js" %}'></script>
+<script>
+    
+    var graphLabels = {% autoescape off %} [{{ top_topics }}] {% endautoescape  %};
+    var graphTotals = {{totals}};
+    var ctx = document.getElementById('myChart');
+    
+    var chartData  = {
+            
+            labels : graphLabels,
+ 
+            datasets: [{
+                label: '',
+                data: graphTotals,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(0, 153, 76, 0.2)',
+                    'rgba(102, 0, 51, 0.2)',
+                    'rgba(0, 0, 0, 0.2)',
+                    'rgba(204,102,0,0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(0, 153, 76, 1)',
+                    'rgba(102, 0, 51, 1)',
+                    'rgba(0, 0, 0, 1)',
+                    'rgba(204,102,0,1)',
+                ],
+                borderWidth: 3
+            }]
+        }; 
+    
+    
+    var config = {
+        type: 'doughnut',
+        data : chartData,
+        options: {
+            
+            title: 
+            {
+                text: 'Number of Questions per Topic (of the top 10 Topics)',
+                display: true,
+            },
+            responsive: true,
+        //     scales: {
+        //         yAxes: [{
+        //             ticks: {
+        //                 beginAtZero: true
+        //             }
+        //         }]
+        //     }
+        // }
+        }
+    }
+    
+    
+    
+    var myChart = new Chart(ctx, config);
+    
+    </script>
+
+
+    <!-- Next update functionise this because its repeating the same thing multiple times -->
+    <script>
+    document.getElementById('buttonBar').onclick = function() 
+    {   $("button").removeAttr('disabled');
+        $("#buttonBar").attr('disabled',true);
+        
+        myChart.destroy();
+        myChart = new Chart(ctx, {
+            type: 'bar',
+            data: chartData,
+            options: {
+                legend: {
+            display: false,
+        },   
+            title: 
+            {
+                text: 'Number of Questions per Topic (of the top 10 Topics)',
+                display: true,
+            },
+        }
+            
+        });
+    };    
+    </script>
+
+<script>
+    document.getElementById('buttonDoughnut').onclick = function() 
+    {   $("button").removeAttr('disabled');
+        $("#buttonDoughnut").attr('disabled',true);
+        
+        myChart.destroy();
+        myChart = new Chart(ctx,config)
+    };    
+    </script>
+
+
+<script>
+    document.getElementById('buttonPie').onclick = function() 
+    {   $("button").removeAttr('disabled');
+        $("#buttonPie").attr('disabled',true);
+        
+        myChart.destroy();
+        myChart = new Chart(ctx, {
+            type: 'pie',
+            data: chartData,
+            options: {
+            title: 
+            {
+                text: 'Number of Questions per Topic (of the top 10 Topics)',
+                display: true,
+            },
+        }
+            
+        });
+    };    
+    </script>
+{% endblock footerjs %}

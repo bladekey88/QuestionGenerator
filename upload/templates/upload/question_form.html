@@ -1,0 +1,102 @@
+{% extends 'core/base.html' %}
+
+
+{% load crispy_forms_tags %}
+
+
+{% block title %} Question Generator {% endblock title %}     
+    
+{% block sidebar %} {% endblock sidebar %}
+
+{% block pageheading %}Question Generator Form {% endblock pageheading %}
+
+{% block content %}
+<div id='javascriptwarning' class="text-center alert text-uppercase alert-danger"  role="alert">
+    </button>
+  <strong><b>WARNING - </b>Javascript must be enabled to proceed</strong> 
+</div>
+
+
+<div id="mainContent" style="display: none;">
+
+  <form method="post" id="questionForm"   data-topics-url="{% url 'upload:ajax_load_topics' %}" >
+    {% csrf_token %}
+    <table>
+      {% crispy form %}
+      <!-- <input type="text" value="password" name="passowrd"> -->
+    </table>
+    
+    <button type="submit" id='submit' name='submit' class='btn btn-primary' hidden disabled>Generate Questions</button>
+    
+  </form>
+</div>
+  {% endblock %}
+
+
+  {% block footerjs %} 
+  <script>
+    $("#id_subjectid").change(function() {
+    var url = $("#questionForm").attr("data-topics-url");
+    var subjectID = $(this).val();
+    $.ajax({
+        traditional: true,
+        url: url,
+        data: {
+            'subject': subjectID
+        },
+        success: function(data) {
+            $("#div_id_topicid").html(data);
+            console.log(data.length)
+            if (data.length > 3051) {      //CHANGE 2922 is the new length of data with the graph.
+                $("#submit").prop('disabled', false);
+                $("#submit").prop('hidden', false);
+                $('label[for=""]').show();
+                $("#div_id_choice_field").show()
+
+            } else {
+            
+                $("#submit").prop('disabled', true);
+                $("#submit").prop('hidden', true);
+                $('label[for=""]').hide();
+                $("#div_id_number_of_questions").hide();
+                $("#div_id_choice_field").hide()
+            }
+        }
+    });
+});
+
+
+
+
+$('#id_choice_field_1').click(function() {
+   if($('#id_choice_field_1').is(':checked')) { 
+     console.log(1)
+    $("#id_number_of_questions").prop('hidden', true);
+    $("#id_number_of_questions").prop('disabled', true);
+    $('label[for="id_number_of_questions"]').hide();
+    }
+});
+
+$('#id_choice_field_2').click(function() {
+   if($('#id_choice_field_2').is(':checked')) { 
+    //  alert("Disabled until this is fully ready");
+    $("#id_number_of_questions").prop('hidden', false);
+    $("#id_number_of_questions").prop('disabled', false);
+    $("#id_number_of_questions").prop('required', true);
+    $("#div_id_number_of_questions").show();
+    $('label[for="id_number_of_questions"]').show();
+
+    
+    // $("#id_choice_field_1").prop('checked', true); //TODO DELETE
+    //  $("#id_choice_field_2").prop('disabled', true);
+    //  $("#id_number_of_questions").prop('disabled', true);
+    }
+});
+
+$(document).ready(function () {
+    $('#javascriptwarning').hide();
+    $('#mainContent').show();
+});
+
+  </script>
+{% endblock footerjs %}

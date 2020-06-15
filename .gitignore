@@ -1,0 +1,26 @@
+
+### Django ###
+*.log
+*.cpython*
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+media
+*/migrations/*
+
+# pyenv
+.python-version
+
+
+# Environments
+.env
+.key
+.pub
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.vscode

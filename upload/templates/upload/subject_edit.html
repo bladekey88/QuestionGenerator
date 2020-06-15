@@ -1,0 +1,44 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{subject}}{% endblock title %}
+
+{% block sidebar %} {% endblock sidebar %}
+
+{% block pageheading %}Subject Details{% endblock pageheading %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+
+
+<div class="card card-bordered shadow">
+    <div class="card-header text-justify text-wrap  font-weight-light">
+      {% if perms.upload.change_subject%}Edit Subject Details{% else %}Subject Details{% endif %}
+  </div>
+  
+  <div class="card-body">
+  {% if perms.upload.change_subject%}
+  <h6 class="alert alert-info"><i class="fa fa-info-circle"></i>&nbsp;&nbsp;&nbsp;The subject should be entered as you'd expect it to appear <em>e.g. IT, Chemistry, PE, English Literature.</em></h6>
+
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form | crispy }}
+    </div>
+  <div class="card-footer">
+    <input type="submit" value="Update"  class="btn border-dark btn-primary">
+    <input type="reset" value="Reset"  class="btn btn-info border-dark">
+    <a href='{% url "upload:deletesubject" subjectid=subjectid %}'><button type="button" class="btn border-dark bg-danger text-white visible">Delete</button></a>
+
+      </div>
+  </form>
+  {% else %}
+  <label for="subjectname">Subject Name</label>
+  <input type="text" id="subjectname" class="form-control" aria-readonly="true" readonly value="{{subject}}">
+  </div>
+
+
+  {% endif %}
+</div>
+
+
+
+{% endblock content %}

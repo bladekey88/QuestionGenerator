@@ -1,0 +1,254 @@
+{% extends 'core/base.html' %}
+
+
+{% load crispy_forms_tags %}
+
+
+{% block title %} Question Generator {% endblock title %}     
+    
+{% block sidebar %} {% endblock sidebar %}
+
+{% block pageheading %}Question Generator{% endblock pageheading %}
+
+{% block customcss %}
+<style>
+
+
+
+  input[type="radio"] {
+     opacity: 0;
+  }
+  
+  .custom-control {
+      padding-left: 0;
+  }
+  .custom-radio label { 
+      display: inline-block;
+      padding: 10px 20px;
+      font-family: sans-serif, Arial;
+      font-size: 16px;
+      border: 2px solid #444;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #fffdd0;
+  
+  }
+  
+  .custom-radio input[type="radio"]:checked + label {
+      background-color:rgb(25, 91, 146);
+      border-color: rgb(28, 131, 28);
+      color: white;
+      border: 3px solid #000;
+  }
+  
+  .custom-radio input[type="radio"]:checked + label::after {
+      content:"SELECTED";
+      font-weight: bold;
+      font-size: 10pt;
+      text-align: center;
+      background: white;
+      color:rgb(28, 131, 28);
+      padding: 4px;
+      margin-left: 35%;
+  
+  }
+  
+  .custom-radio input[type="radio"]:focus + label {
+      border: 3px dashed red;    
+  }
+  
+  .custom-radio label:hover {
+    background-color: rgb(130, 184, 228);
+    border: 1px dashed gold;
+    color: white;
+  }
+  
+  hr{
+      border-top: 1px solid;
+  }
+  </style>
+  {% endblock customcss %}
+
+{% block content %}
+<div id='javascriptwarning' class="text-center alert text-uppercase alert-danger"  role="alert">
+    </button>
+  <strong><b>WARNING - </b>Javascript must be enabled to proceed</strong> 
+</div>
+
+<div id="mainContent" style="display: none;">
+
+  <form method="post" id="questionForm"   data-topics-url="{% url 'upload:ajax_load_topics' %}" >
+    {% csrf_token %}
+ 
+      <!-- {% crispy form %} -->
+      
+         <div class="card card-border">
+            <div class="card-body">
+                {{form.subjectid |as_crispy_field}}
+               {{form.topicid |as_crispy_field}}
+      </div>
+   </div>   
+   
+      <div id="optionGroup" class="card shadow bg-white mb-3 border-dark">
+        <div class="card-header border-dark">
+           <h6 class="text-dark font-weight-bold text-left">Select an Option For Question Generation</h6>
+        </div>
+        <div class="card-body">
+  
+              <div class="form-group flex-fill">
+                 <div class="container">
+                    <div class="row">
+                       <div class="col-md-4" id="radioColumn">
+                          <div class="custom-control custom-radio">
+                             <input required type="radio" id="customRadio1" name="customRadio" class="form-check-input" value="oneFromEach">
+                             <label class="form-check-label" for="customRadio1">
+                                <h5 class="text-center">1 Question From Each Selected Topic</h5>
+                                <hr>
+                                <p class="text-center font-weight-lighter">Selecting this option will return one randomly selected question from each topic chosen. If a topic only has one question associated to it, then that question will always be returned.</p>
+                             </label>
+                          </div>
+                       </div>
+                       <div class="col-md-4" id="radioColumn">
+                          <div class="custom-control custom-radio">
+                             <input type="radio" id="customRadio2" name="customRadio" class="form-check-input" value="tenFromEach">
+                             <label class="form-check-label" for="customRadio2">
+                                <h5 class="text-center">10 Questions From A Selected Topic</h5>
+                                <hr>
+                                <p class="text-center font-weight-lighter">Selecting this option will return ten randomly selected questions. You can quickly change topics on the results page.<strong>You do <b>not</b> need to select a topic to continue.</strong></strong></p>
+                             </label>
+                          </div>
+                       </div>
+                       <div class="col-md-4" id="radioColumn">
+                          <div class="custom-control custom-radio">
+                             <input type="radio" id="customRadio3" name="customRadio" class="form-check-input" value="fromMany">
+                             <label class="form-check-label" for="customRadio3">
+                                <h5 class="text-center"><em>x</em> Questions From Any Selected Topic</h5>
+                                <hr>
+                                <p class="text-center font-weight-lighter">Selecting this option will return a variable amount of randomly selected questions from any of the topics chosen. The maximum number of questions that can be returned is 10.</p>
+                             </label>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+              {{form.number_of_questions|as_crispy_field}}
+          
+        </div>
+     </div>
+    <div id="submitWarning" class="text-center font-weight-bold"></div>
+    <button type="submit" id='submit' name='submit' class='btn btn-block btn-primary' hidden disabled>Generate Questions</button>
+    
+  </form>
+</div>
+
+  {% endblock %}
+
+
+  {% block footerjs %} 
+  <script>
+    $("#id_subjectid").change(function() {
+    var url = $("#questionForm").attr("data-topics-url");
+    var subjectID = $(this).val();
+    $.ajax({
+        traditional: true,
+        url: url,
+        data: {
+            'subject': subjectID
+        },
+        success: function(data) {
+            $("#div_id_topicid").html(data);
+            console.log(data.length)
+            if (data.length > 3500) {      //CHANGE 3240 is the new length of data with the graph.
+                $("#submit").prop('disabled', false);
+                $("#submit").prop('hidden', false);
+                $('label[for=""]').show();
+                $("#div_id_choice_field").show()
+                $('#optionGroup').show();                
+                $('.form-check-input').prop('checked',false);
+                $('#optionDisabled').hide();
+
+
+            } else {
+            
+                $("#submit").prop('disabled', true);
+                $("#submit").prop('hidden', true);
+                $('label[for=""]').hide();
+                $("#div_id_number_of_questions").hide();
+                $('#optionGroup').hide();
+
+            }
+        }
+    });
+});
+
+
+
+
+$('#customRadio1').click(function() {
+   if($('#customRadio1').is(':checked')) { 
+
+    $("#id_number_of_questions").prop('hidden', true);
+    $("#id_number_of_questions").prop('disabled', true);
+    $('label[for="id_number_of_questions"]').hide();
+    $('.chkbox').prop("disabled", false);
+    $('#optionDisabled').hide();
+    // 
+    }
+});
+
+$('#customRadio2').click(function() {
+   if($('#customRadio2').is(':checked')) { 
+    $("#id_number_of_questions").prop('hidden', true);
+    $("#id_number_of_questions").prop('disabled', true);
+    $('.chkbox').prop('checked', false);
+    $('.chkbox').prop("disabled", true);
+    $('label[for="id_number_of_questions"]').hide();
+    $('#optionDisabled').show();
+
+    }
+});
+
+
+$('#customRadio3').click(function() {
+   if($('#customRadio3').is(':checked')) { 
+    $("#id_number_of_questions").prop('hidden', false);
+    $("#id_number_of_questions").prop('disabled', false);
+    $("#id_number_of_questions").prop('required', true);
+    $("#div_id_number_of_questions").show();
+    $('label[for="id_number_of_questions"]').show();
+    $('.chkbox').prop("disabled", false);
+    $('#optionDisabled').hide();
+   }
+});
+
+$(document).ready(function () {
+    $('#javascriptwarning').hide();
+    $('#mainContent').show();
+    $('#optionGroup').hide();
+    
+
+});
+
+$('#submit').click(function () {
+  
+  
+  if ($('#customRadio1').is(':checked') && $('div.checkbox-group.required :checkbox:checked').length == 0)
+  {
+    event.preventDefault();
+    $('#submitWarning').addClass("alert border-danger alert-danger");
+    $('#submitWarning').html("<b>You have selected '1 Question From Each Selected Topic', but have not selected any topics. Please correct this and try again, or choose another option. </b>")
+  }
+
+
+  if ($('#customRadio3').is(':checked') && $('div.checkbox-group.required :checkbox:checked').length == 0)
+  {
+    event.preventDefault();
+    $('#submitWarning').addClass("alert border-danger alert-danger");
+    $('#submitWarning').html("<b>You have selected 'x Questions From Any Selected Topic', but have not selected any topics. Please correct this and try again, or choose another option. </b>")
+  }
+
+
+})
+
+  </script>
+{% endblock footerjs %}

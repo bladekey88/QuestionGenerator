@@ -1,0 +1,115 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Private Messages{% endblock title %}
+
+{% block customcss %}
+<link href='{% static "/vendor/datatables/datatables.min.css" %}' rel="stylesheet" type="text/css">
+
+<style>
+    td.table__first_td {
+	content: "";
+	width: 1px;
+	position: relative;
+    border-top: none;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	background-color: #1776ea;
+}
+</style>
+
+{% endblock customcss %}
+
+{% block sidebar %} {% endblock sidebar %}
+
+{% block pageheading %}Private Messages{% endblock pageheading %}
+
+{% block content %}
+
+<div id = 'inbox'>
+    <h5 style='color:black; margin-left: 1rem; font-size:medium;   text-underline-offset: 0.77rem;'>
+        <span style="padding-left: 0.5rem; text-decoration: underline;">Inbox <small>({{privateMessages|length}}</small>)</span>&nbsp;&nbsp;&nbsp;
+        <a href="{% url 'messaging:outbox' %}">Outbox</a>
+       
+    </h5>
+
+    <form method="POST">
+        {{form.as_p}}
+        {% csrf_token %}
+
+    <table id="table-inbox" class="table table-striped table-hover table-sm " style="margin-left: 1rem;">
+        <thead>
+            <tr style="text-transform: uppercase;">
+                <th scope="col"><input type="checkbox" id="selAllMessages" name="selAllMessages" {% if privateMessages|length < 1 %}disabled{% endif %} ></th>
+ 
+                <th scope="col">From</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Date Received</th>
+            </tr>
+        </thead>
+        <tbody style="font-size: smaller;">
+            {% for pm in privateMessages %}
+            <tr class="messageRow">
+                <td {% if pm.message_read is not True  %} class="table__first_td" {% endif %}>
+
+                    <input type="checkbox" id = {{pm.message_id}} name="selected_options" value="{{pm.message_id}}" >       
+
+                </td>
+                <td style="border: none;"><a href="{% url 'messaging:readmessage' message_id=pm.message_id %}">{{ pm.from_id.first_name }} {{ pm.from_id.last_name }} ({{pm.from_id}})</a></td>
+                <td style="border: none;"> <a href="{% url 'messaging:readmessage' message_id=pm.message_id %}">{{ pm.message_subject }}</a> </td>
+                <td style="border: none;">{{ pm.message_date }}</td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+        
+    </table>
+    
+    <input type="submit" id="allMessages" name="allMessages" value="Mark All As Read" class="btn btn-sm btn-primary" {% if privateMessages|length < 1 %}disabled{% endif %} >
+    <input type="submit" id="delallMessages" name="delallMessages" value="Deleted Selected (Cannot be Undone)" class="btn btn-sm btn-danger " {% if privateMessages|length < 1 %}disabled{% endif %} >
+
+</div>
+
+
+
+
+{%  endblock content %}
+
+{% block footerjs %}
+<script src='{% static "/vendor/datatables/datatables.min.js" %}'></script>
+<script src='{% static "/vendor/datatables/DataTables-1.10.20/js/dataTables.bootstrap4.min.js" %}'></script>
+
+<script>
+    $(document).ready(function() {
+    $('#table-inbox').DataTable( {
+        "columnDefs": [
+    { "orderable": false, "targets": 0 }
+        ],
+       fixedHeader: true,
+        "paging":   true,
+        "pagingType": "full_numbers",
+        "ordering": true,
+        "info":     true,
+        "order": [[ 3, "desc" ]],
+        dom: 'rtp',
+        "language": {
+                "emptyTable": "No messages"
+        }
+        
+    } );
+} );
+
+</script>
+
+
+<script>
+
+$("#selAllMessages").click(function(){
+    $('input:checkbox').not(this).prop('checked', this.checked);
+});
+
+</script>
+
+
+{% endblock footerjs %}
