@@ -9,48 +9,84 @@
 {{p}}
 {% if perms.knox.view_authtoken %}
 <div class="card card-border border-dark shadow responsive table-striped">
-    <div class="card-header text-justify text-wrap border-dark text-center text-capitalize font-weight-bolder">
-      <caption>List of API keys associatged to your account</caption>
-    </div>
-    <div class="card-body text-center">
-      <table id="apiTable" class="table shadow table-hover table-responsive-lg">
-        
-        <thead scope="row" class="thead-dark text-uppercase">
-          <tr>
-            <th scope="col">Token Name</th>
-            <th scope="col">Generation Date (UTC)</th>
-            <th scope="col">Expiration Date (UTC)</th>
-            <th scope="col">Status</th>
-            <th scope="col">Partial Key Hash</th>
-          </tr>
-        </thead>
-        <tbody>
-        {% if token_data %}
-          {% for token in token_data %}
-        
-        <tr class >
-          <td class="align-middle tokenName">{{token.0}}</td>
-          <td class="align-middle startDate">{{token.1}}</td>
-          <td class="align-middle endDate">{{token.2}}</td>
-          <td class="status"></td>  
-          <td class="wrap-text align-middle hash">{{token.3|slice:":16"}}</td>          
+  <div class="card-header text-justify text-wrap border-dark text-center text-capitalize font-weight-bolder">
+    <caption>List of API keys associated to your account</caption>
+  </div>
+  <div class="card-body text-center">
+    {% if token_data %}
+    <table id="apiTable" class="table shadow table-hover table-responsive-lg">
+
+      <thead scope="row" class="thead-dark text-uppercase">
+        <tr>
+          <th scope="col">Generation Date (UTC)</th>
+          <th scope="col">Expiration Date (UTC)</th>
+          <th scope="col">Status</th>
+          <th scope="col">Partial Key</th>
+          <th scope="col">Partial Key Hash</th>
+          <th scope="col"></th>
         </tr>
-            {% endfor %}
-          {% else %}
-          <tr class >
-            <td colspan="5" class="align-middle tokenName">You do not currently have any API tokens</td>
-         {%  endif %}
-      </table>
-    </div>      
+      </thead>
+      <tbody>
+
+        {% for token in token_data %}
+
+        <tr class>
+          <td class="align-middle startDate">{{token.0}}</td>
+          <td class="align-middle endDate">{{token.1}}</td>
+          <td class="status"></td>
+          <td class="align-middle ">{{token.3}}</td>
+          <td class="wrap-text align-middle hash">{{token.2|slice:":16"}}</td>
+          <td>
+            <a href="#" data-toggle="modal" data-target="#configModal">
+              <button class="btn btn-danger border-dark font-weight-bold">Revoke Token</button>
+            </a>
+          </td>
+        </tr>
+        <div class="modal fade" id="configModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Revoke Token</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div class="modal-body text-left">
+                <p>Click the confirm button to revoke this token.</p>
+                <p class="font-weigth-bolder text-danger">The action is <span class="text-danger">immediate and
+                    irreversible.
+                    All sessions using this key will be invalidated</span>.</p>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-lg btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-lg btn-warning text-danger border-danger"
+                  href="{% url 'api:expire-api-key' token.2 %}">I
+                  understand the risk,
+                  Proceed</a>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </table>
+    {% else %}
+
+    <div class=" h5 alert alert-warning font-weight-bold border-warning">You do not have any API tokens</div>
+    {%  endif %}
+
+  </div>
 </div>
 {% endif %}
+
 {% endblock content %}
 
 {% block footerjs %}
 <script>
-  $(document).ready(function() {
+  $(document).ready(function () {
     let currentDate = new Date();
-    $("#apiTable > tbody > tr > td.endDate").each(function() {
+    $("#apiTable > tbody > tr > td.endDate").each(function () {
       let expiryDate = new Date($(this).text());
       let expiredHTML = "<buttton class='btn btn-danger btn-sm  active border-dark'><small class='text-white text-center font-weight-bold'>Expired</small></div>"
       let activeHTML = "<buttton class='btn btn-primary btn-sm  active border-dark'><small class=' text-center font-weight-bold'>Active</small></div>"
@@ -59,8 +95,7 @@
         $(this).closest("td").next().append(expiredHTML)
         $(this).parent().addClass("shadow table-danger text-danger")
       }
-      else
-      {
+      else {
         $(this).closest("td").next().append(activeHTML)
 
       }

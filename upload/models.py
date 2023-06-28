@@ -44,7 +44,6 @@ class Level(models.Model):
     levelname = models.CharField(db_column='levelName', unique=True, max_length=255)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'level'
         verbose_name = "Subject Level"
         verbose_name_plural = "Subject Levels"
@@ -64,7 +63,6 @@ class Question(models.Model):
 
 
     class Meta:
-        managed = True
         db_table = 'questions'
         unique_together = (('questiontext', 'topicid', 'subjectid'),)
         verbose_name = "Question"
@@ -86,7 +84,6 @@ class Subject(models.Model):
     subjectname = models.CharField('Subject Name', db_column='subjectName', unique=True, max_length=255,)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'subject'
         verbose_name = "Subject"
         verbose_name_plural = "Subjects"        
@@ -101,7 +98,6 @@ class Topic(models.Model):
     topicname = models.CharField('Topic Name', db_column='topicName', unique=True, max_length=255)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'topics'
         verbose_name = "Topic"
         verbose_name_plural = "Topics"

@@ -45,7 +45,8 @@
     </style>
     <div id='javascriptwarning' class="alert alert-warning" role="alert">
         </button>
-        <strong><b>WARNING - </b></strong> Javascript must be enabled to use the full functionality (including PDF, MS Word and
+        <strong><b>WARNING - </b></strong> Javascript must be enabled to use the full functionality (including PDF, MS
+        Word and
         image exports).
     </div>
 
@@ -59,11 +60,12 @@
         <div class="card-header py-3">
             {% if user.is_anonymous %}
             <div id="notloggedin" class="border border-dark alert alert-primary text-dark font-weight-bold text-center">
-                <h5><i class="fa fa-info-circle"></i><b> Notice: </b> Answers are only available to logged in users. This is to reduce system load.</h5>
+                <h5><i class="fa fa-info-circle"></i><b> Notice: </b> Answers are only available to logged in users.
+                    This is to reduce system load.</h5>
 
             </div>
             {% endif %}
-    
+
             <h5 class="font-weight-bold text-primary">Questions for {{subject_name}} </h6>
                 {% if choice_field  != "tenFromEach" %}
                 <h6 class="card-subtitle mt-2 mb-2 text-muted">There are
@@ -72,45 +74,46 @@
         </div>
         <div class="card-body text-primary text-dark">
             <div id="tableButtons">
-                
+
                 <div class="text-center font-weight-lighter text-capitalize" id="topics"></div>
                 <div id="tableButtons" class="bg-light border-dark border text-center">
                     <p class="text-center font-weight-bolder">Table Options</p>
 
-                {% if choice_field  != "tenFromEach" and  user.is_authenticated %}
-                <button class='btn btn-outline-primary btn-sm mt-auto border border-primary' id='btnAnswers'
-                name='tableImg'><i class="far fa-2x fa-eye"></i> Show Answers</button>
-                
-                <button class='btn btn-outline-primary btn-sm mt-auto border border-primary' id='btnHideAnswers'
-                name='tableImg'><i class="far fa-2x fa-eye-slash"></i>  Hide Answers</button>
-                
-                {% elif choice_field  == "tenFromEach" %}
-                <button class="btn btn btn-outline-info btn-sm mt-auto border border-info"
-                id="random-button"> <i class="fab fa-2x fa-rev"></i> Randomise Questions</button> 
-                {% endif %}
-                {% if user.is_authenticated %}
-                <button class='btn btn-outline-danger btn-sm mt-auto border border-danger' id='tableImg'
-                name='tableImg'><i class="far fa-2x fa-image"></i> Create Image (answers)</button>
-                {% endif %}
-                
-                <button class='btn btn-outline-danger btn-sm mt-auto border border-danger' id='tableImgNoAns'
-                    name='tableImg2'><i class="far fa-2x fa-image"></i> Create Image (no answers)</button>
-                
+                    {% if choice_field  != "tenFromEach" and  user.is_authenticated %}
+                    <button class='btn btn-outline-primary btn-sm mt-auto border border-primary' id='btnAnswers'
+                        name='tableImg'><i class="far fa-2x fa-eye"></i> Show Answers</button>
 
-                {% comment %}
-                <button class='btn btn-outline-danger btn-sm mt-auto border border-danger' id='tableImgMulti'
-                name='tableImgMulti'><i class="far fa-2x fa-images"></i> Create Multiple Images</button>
-                {% endcomment %}
+                    <button class='btn btn-outline-primary btn-sm mt-auto border border-primary' id='btnHideAnswers'
+                        name='tableImg'><i class="far fa-2x fa-eye-slash"></i> Hide Answers</button>
 
-                {% if user.is_authenticated %}
-                    
-                    <button class='btn btn-outline-success btn-sm mt-auto border border-success' id='tablePDF'
-                    name='tablePDF'><i class="far fa-2x fa-file-pdf"></i> Create PDF (answers)</button>
+                    {% elif choice_field  == "tenFromEach" %}
+                    <button class="btn btn btn-outline-info btn-sm mt-auto border border-info" id="random-button"> <i
+                            class="fab fa-2x fa-rev"></i> Randomise Questions</button>
                     {% endif %}
-                <button class='btn btn-outline-success btn-sm mt-auto border border-success' id='tablePDFNoAns'
-                    name='tablePDFNoAns'><i class="far fa-2x fa-file-pdf"></i> Create PDF (no answers)</button>
-                <button class="btn btn-outline-primary btn-sm mt-auto border border-info" type="submit"
-                    onclick='exportToWord()' id="exportWord"> <i class="fas fa-2x fa-file-word"></i> Worksheet</button>
+                    {% if user.is_authenticated %}
+                    <button class='btn btn-outline-danger btn-sm mt-auto border border-danger' id='tableImg'
+                        name='tableImg'><i class="far fa-2x fa-image"></i> Create Image (answers)</button>
+                    {% endif %}
+
+                    <button class='btn btn-outline-danger btn-sm mt-auto border border-danger' id='tableImgNoAns'
+                        name='tableImg2'><i class="far fa-2x fa-image"></i> Create Image (no answers)</button>
+
+
+                    {% comment %}
+                    <button class='btn btn-outline-danger btn-sm mt-auto border border-danger' id='tableImgMulti'
+                        name='tableImgMulti'><i class="far fa-2x fa-images"></i> Create Multiple Images</button>
+                    {% endcomment %}
+
+                    {% if user.is_authenticated %}
+
+                    <button class='btn btn-outline-success btn-sm mt-auto border border-success' id='tablePDF'
+                        name='tablePDF'><i class="far fa-2x fa-file-pdf"></i> Create PDF (answers)</button>
+                    {% endif %}
+                    <button class='btn btn-outline-success btn-sm mt-auto border border-success' id='tablePDFNoAns'
+                        name='tablePDFNoAns'><i class="far fa-2x fa-file-pdf"></i> Create PDF (no answers)</button>
+                    <button class="btn btn-outline-primary btn-sm mt-auto border border-info" type="submit"
+                        onclick='exportToWord()' id="exportWord"> <i class="fas fa-2x fa-file-word"></i>
+                        Worksheet</button>
                     <br><br>
                 </div>
             </div>
@@ -130,7 +133,7 @@
 
 
             {% if choice_field  != "tenFromEach" %}
-        
+
             <table id="generate-questions"
                 class="table table-striped display cell-border stripe hover order-column cell-border"
                 style="width:100%">
@@ -154,13 +157,13 @@
                     {% endif %}
 
                     {% if qo %}
-                        {% for q in qo.values %}
+                    {% for q in qo.values %}
                     <tr>
                         <td>{{q.0.0}}</td>
                         <td>{{q.0.1}}</td>
                         <td class="answers">{{q.0.2}}</td>
                     </tr>
-                     {% endfor %}
+                    {% endfor %}
                     {% endif %}
 
                 </tbody>
@@ -237,18 +240,14 @@
     $(document).ready(function () {
 
         {% if choice_field != "tenFromEach" %}
-            loadDatatable();
-            $("#btnHideAnswers").hide();
-            $("#btnAnswers").show();
-            $('#random-button').hide();
+        loadDatatable();
+        $("#btnHideAnswers").hide();
+        $("#btnAnswers").show();
+        $('#random-button').hide();
         {% elif choice_field == "tenFromEach" %}
-            var apiOutput = null
-            getQuestions("http://3.11.69.77:8000/api/v1/questions?subjectid={{subject}}")
+        var apiOutput = null
+        getQuestions("http://127.0.0.1:8000/api/v1/questions?subjectid={{subject}}")
         {% endif %}
-        
-       
-        
-        
     })
 </script>
 
@@ -275,51 +274,48 @@
 
 
     {% comment %}
-        //Create Single Images (With Answers()
+    //Create Single Images (With Answers()
     {% endcomment %}
     $('#tableImg').on('click', function () {
         createImage(1)
     })
-    
+
     {% comment %}
-        //Create Single Images (With No Answers) 
+    //Create Single Images (With No Answers) 
     {% endcomment %}
-    
+
     $('#tableImgNoAns').on('click', function () {
         createImage(0)
     })
- 
+
 
     function createImage(answers) {
 
         var div = $('#tableImage');
-        if ($('#generate-questions').length != 0) 
-            {
-                $('#generate-questions').DataTable().destroy();
-            }
-                if (answers=="1") 
-                {
-                    {% if choice_field == "tenFromEach" %}
-                    
-                    console.log("i want answers")
-                    $('.nav-link[href="#answerTable"]' ).trigger('click');
+        if ($('#generate-questions').length != 0) {
+            $('#generate-questions').DataTable().destroy();
+        }
+        if (answers == "1") {
+            {% if choice_field == "tenFromEach" %}
 
-                    {% else %}
-                        $('.answers').show()
-                    {% endif %}
-                }
-                else
-                {
-                    {% if choice_field == "tenFromEach" %}
-                        console.log("no answers please")
-                        $('.nav-link[href="#questionTable"]' ).trigger('click');
-                    {% else %}
-                        $('.answers').hide()
-                    {% endif %}   
-                }
-                
-            
-        
+            console.log("i want answers")
+            $('.nav-link[href="#answerTable"]').trigger('click');
+
+            {% else %}
+            $('.answers').show()
+            {% endif %}
+        }
+        else {
+            {% if choice_field == "tenFromEach" %}
+            console.log("no answers please")
+            $('.nav-link[href="#questionTable"]').trigger('click');
+            {% else %}
+            $('.answers').hide()
+            {% endif %}
+        }
+
+
+
         $('.sidebar').hide();
         $('.alert').hide();
         $('.navbar').hide();
@@ -329,11 +325,11 @@
         $('#resetPage').removeAttr('hidden');
 
         {% if choice_field == "tenFromEach" %}
-            $('.nav-tabs').hide();
+        $('.nav-tabs').hide();
         {% endif %}
-        
 
-       copies = 0
+
+        copies = 0
         for (i = 0; i < copies; ++i) {
             var $div = $('div[id^="card"]:last');
             var num = parseInt($div.prop("id").match(/\d+/g), 10) + 1;
@@ -364,17 +360,16 @@
         }
         $('#resetPage').attr('hidden', true);
         $('h3').remove();
-        if ($('#generate-questions').length != 0) 
-            {
-                loadDatatable();
-                if (answers==0) {$('.answers').show()}
-            }
-        
+        if ($('#generate-questions').length != 0) {
+            loadDatatable();
+            if (answers == 0) { $('.answers').show() }
+        }
+
         $("btnAnswers").show();
         $("btnHideAnswers").hide();
 
         {% if choice_field == "tenFromEach" %}
-            $('.nav-tabs').show();
+        $('.nav-tabs').show();
         {% endif %}
 
 
@@ -390,10 +385,10 @@
         event.preventDefault();
         var tableID = null;
         {% if choice_field != "tenFromEach" %}
-            var table = $('#generate-questions').DataTable();
+        var table = $('#generate-questions').DataTable();
         table.column(2).visible(true);
         {% elif choice_field == "tenFromEach" %}
-            tableID = "2"
+        tableID = "2"
         {% endif %}
 
         createPDF(tableID);
@@ -404,25 +399,25 @@
         event.preventDefault();
         var tableID = null;
         {% if choice_field != "tenFromEach" %}
-            var table = $('#generate-questions').DataTable();
+        var table = $('#generate-questions').DataTable();
 
-            {% if user.is_authenticated %}
-                table.column(2).visible(false);
-            {% endif %}
+        {% if user.is_authenticated %}
+        table.column(2).visible(false);
+        {% endif %}
 
-            $('#generate-questions thead tr').append('<th data-name="answers">Answers</th>')
-            $('#generate-questions tbody tr').append('<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>')
+        $('#generate-questions thead tr').append('<th data-name="answers">Answers</th>')
+        $('#generate-questions tbody tr').append('<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>')
 
         {% elif choice_field == "tenFromEach" %}
-                tableID = "1"
+        tableID = "1"
         {% endif %}
-    
+
         createPDF(tableID);
-       
+
         {% if choice_field != 'tenFromEach' %}
         var target = $('table').find('th[data-name="answers"]');
         var index = (target).index();
-        $('table tr').find('th:eq(' + index + '),td:eq(' + index + ')' ).remove();
+        $('table tr').find('th:eq(' + index + '),td:eq(' + index + ')').remove();
         {% endif %}
 
     })
@@ -507,13 +502,15 @@
     <!-- Nav tabs -->
 <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item">
-        <a class="nav-link active"  id="questionLink" data-toggle="tab" value="1" href="#questionTable" role="tab">Questions</a>
+        <a class="nav-link active" id="questionLink" data-toggle="tab" value="1" href="#questionTable"
+            role="tab">Questions</a>
     </li>
-    
+
     {% if user.is_authenticated %}
 
     <li class="nav-item">
-        <a class="nav-link" id="answerLink" data-toggle="tab" value="2" href="#answerTable" role="tab">Questions and Answers</a>
+        <a class="nav-link" id="answerLink" data-toggle="tab" value="2" href="#answerTable" role="tab">Questions and
+            Answers</a>
     </li>
     {% endif %}
 </ul>
@@ -571,19 +568,19 @@
 
 <script>
     function exportToWord() {
-        
-        {% if choice_field  == "tenFromEach" %}
-            const subject = (results[0]['subjectid']['subjectname'])
-            const topic = (results[0]['topicid']['topicname'])
+
+        {% if choice_field == "tenFromEach" %}
+        const subject = (results[0]['subjectid']['subjectname'])
+        const topic = (results[0]['topicid']['topicname'])
         {% else %}
-            const subject = "{{ subject_name}}"
-            
-            // var results = [{{qm_json|safe}}]
-            var results = {{qm_json|safe}}
-            const topic = ""
+        const subject = "{{ subject_name}}";
+
+        // var results = [{{qm_json|safe}}]
+        var results = {{ qm_json| safe }};
+        const topic = ""
         {% endif %}
-        
-     
+
+
         let doc = new docx.Document(
             {
                 title: subject + ":" + topic + " Worksheet",
@@ -592,12 +589,12 @@
                 description: "Exported Questions for " + topic,
                 subject: subject,
                 lastModifiedBy:
-            {% if user.is_authenticated %}
+                    {% if user.is_authenticated %}
         	    "{{ request.user }}",
-             {% else %}
-                "Unknown",
-                {% endif %}
-                revision: 1,
+            {% else %}
+    "Unknown",
+        {% endif %}
+    revision: 1,
                 })
 
     const mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -623,53 +620,52 @@
         text: "",
     });
 
-    
-    
-    
+
+
+
     const topicParagraph =
         new docx.Paragraph({
             alignment: docx.AlignmentType.CENTER,
             children:
                 [new docx.TextRun({
-                    {% if choice_field  == "tenFromEach" %}
+                    {% if choice_field == "tenFromEach" %}
                         text: "Topic - " + topic,
-                    
-                    {% endif %}
-                    bold: true,
-                    color: "black",
-                    size: 28,
-                    font: "Calibri",
+
+            {% endif %}
+    bold: true,
+        color: "black",
+            size: 28,
+                font: "Calibri",
                     smallCaps: true,
                 })
                 ],
         })
-    
+
     const pageBreak = new docx.Paragraph({
         children: [new docx.PageBreak()],
     });
 
-    {% if choice_field  != "tenFromEach" %}
-    
-        
+    {% if choice_field != "tenFromEach" %}
+
+
     {% comment %}
     //  <>This is needed to get a flat result of result to pass into the next function when using qo
     {% endcomment %}
-    
-    {% if qo %}    
-        keys = Object.getOwnPropertyNames(results)
-        var new_results = []
-        for (var i=0; i< keys.length;i++) 
-        {  
-            new_results.push(results[(keys[i])]) 
-        }
-        results = new_results  
-        {% comment %}
+
+    {% if qo %}
+    keys = Object.getOwnPropertyNames(results)
+    var new_results = []
+    for (var i = 0; i < keys.length; i++) {
+        new_results.push(results[(keys[i])])
+    }
+    results = new_results
+    {% comment %}
          Override results here rather than using complex logic later
-         {% endcomment %}
+    {% endcomment %}
     {% endif %}
-   
-  
-        
+
+
+
     const rowWorksheet = results.map(function (result) {
         return new docx.TableRow(
             {
@@ -678,38 +674,38 @@
                         {
                             {% if qo %}
                                 children: [new docx.Paragraph(result[0][0])],
-                            {% elif qm %}
+            {% elif qm %}
                                 children: [new docx.Paragraph(result[0])],
-                            {% endif %}
-                            
-                            width:
-                            {
-                                size: 20,
-                                type: docx.WidthType.PERCENTAGE,
+        {% endif %}
+
+    width:
+    {
+        size: 20,
+            type: docx.WidthType.PERCENTAGE,
                             }
                         }),
-                    new docx.TableCell(
-                        {
+    new docx.TableCell(
+        {
                             {% if qo %}
-                                children: [new docx.Paragraph(result[0][1])],
-                            {% elif qm %}
-                                children: [new docx.Paragraph(result[1])],
-                            {% endif %}
-                            width:
-                            {
-                                size: 40,
-                                type: docx.WidthType.PERCENTAGE,
+    children: [new docx.Paragraph(result[0][1])],
+        {% elif qm %}
+    children: [new docx.Paragraph(result[1])],
+        {% endif %}
+    width:
+    {
+        size: 40,
+            type: docx.WidthType.PERCENTAGE,
                             }
                         }),
-                    new docx.TableCell(
-                    {
-                        children: [],
-                        width:
-                        {
-                            size: 40,
-                            type: docx.WidthType.PERCENTAGE,
-                        }
-                    }),
+    new docx.TableCell(
+        {
+            children: [],
+            width:
+            {
+                size: 40,
+                type: docx.WidthType.PERCENTAGE,
+            }
+        }),
                 ],
             })
     })
@@ -724,40 +720,40 @@
                         {
                             {% if qo %}
                                 children: [new docx.Paragraph(result[0][0])],
-                            {% elif qm %}
+            {% elif qm %}
                                 children: [new docx.Paragraph(result[0])],
-                            {% endif %}
-                            
-                            width:
-                            {
-                                size: 20,
-                                type: docx.WidthType.PERCENTAGE,
+        {% endif %}
+
+    width:
+    {
+        size: 20,
+            type: docx.WidthType.PERCENTAGE,
                             }
                         }),
-                    new docx.TableCell(
-                        {
+    new docx.TableCell(
+        {
                             {% if qo %}
-                                children: [new docx.Paragraph(result[0][1])],
-                            {% elif qm %}
-                                children: [new docx.Paragraph(result[1])],
-                            {% endif %}
-                            width:
-                            {
-                                size: 40,
-                                type: docx.WidthType.PERCENTAGE,
+    children: [new docx.Paragraph(result[0][1])],
+        {% elif qm %}
+    children: [new docx.Paragraph(result[1])],
+        {% endif %}
+    width:
+    {
+        size: 40,
+            type: docx.WidthType.PERCENTAGE,
                             }
                         }),
-                        new docx.TableCell(
-                        {
+    new docx.TableCell(
+        {
                             {% if qo %}
-                                children: [new docx.Paragraph(result[0][2])],
-                            {% elif qm %}
-                                children: [new docx.Paragraph(result[2])],
-                            {% endif %}
-                            width:
-                            {
-                                size: 40,
-                                type: docx.WidthType.PERCENTAGE,
+    children: [new docx.Paragraph(result[0][2])],
+        {% elif qm %}
+    children: [new docx.Paragraph(result[2])],
+        {% endif %}
+    width:
+    {
+        size: 40,
+            type: docx.WidthType.PERCENTAGE,
                             }
                         }),,
                 ],
@@ -767,7 +763,7 @@
 
 
 
-{% else %}
+    {% else %}
     const rowWorksheet = results.map(function (result) {
         return new docx.TableRow(
             {
@@ -793,7 +789,7 @@
                 ],
             })
     })
-    
+
     {% if user.is_authenticated %}
     const rowWorksheetAnswers = results.map(function (result) {
         return new docx.TableRow(
@@ -821,7 +817,7 @@
             })
     })
     {% endif %}
-{% endif %}
+    {% endif %}
 
     const tableblank = new docx.Table(
         {
@@ -838,7 +834,7 @@
         });
 
     {% if user.is_authenticated %}
-  
+
     const tableAnswers = new docx.Table(
         {
             margins:
@@ -858,33 +854,33 @@
     doc.addSection(
         {
             headers: {
-        default: new docx.Header({
-            children: [
-                new docx.Paragraph({
+                default: new docx.Header({
                     children: [
-                        new docx.TextRun("Downloaded From Teaching Periodically - www.teachingperiodically.com"),
+                        new docx.Paragraph({
+                            children: [
+                                new docx.TextRun("Downloaded From Teaching Periodically - www.teachingperiodically.com"),
+                            ],
+                        }),
                     ],
                 }),
-            ],
-        }),
-    },
+            },
             footers: {
                 default: new docx.Footer({
 
                     children: [
-                    new docx.Paragraph({
-                    children: [
-                        new docx.TextRun({
-                            children: ["Page  ", docx.PageNumber.CURRENT],
-                        }),
-                        new docx.TextRun({
-                            children: [" of ", docx.PageNumber.TOTAL_PAGES],
-                        }),
+                        new docx.Paragraph({
+                            children: [
+                                new docx.TextRun({
+                                    children: ["Page  ", docx.PageNumber.CURRENT],
+                                }),
+                                new docx.TextRun({
+                                    children: [" of ", docx.PageNumber.TOTAL_PAGES],
+                                }),
+                            ],
+                        })
+
+
                     ],
-                })
-                        
-                    
-                     ],
                 })
 
             },
@@ -896,12 +892,12 @@
                 tableblank,
                 {% if user.is_authenticated %}             
                 pageBreak,
-                tableAnswers,
+        tableAnswers,
         {% endif %}
 			
         ],
     });
-    
+
     docx.Packer.toBlob(doc)
         .then(blob => {
             console.log(blob);

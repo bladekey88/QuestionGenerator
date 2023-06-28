@@ -6,12 +6,12 @@
 {% block customcss %}
 
 <style>
-	select {
-  -webkit-appearance: none;
-  appearance: none;
-  cursor:pointer;
-  background: white;
-}
+    select {
+        -webkit-appearance: none;
+        appearance: none;
+        cursor: pointer;
+        background: white;
+    }
 </style>
 {% endblock customcss %}
 
@@ -22,29 +22,31 @@
 {% block content %}
 
 <div id="mainQuestions" class="card shadow border-secondary mb-4">
-<noscript>
-    <div class="alert alert-warning text-center text-black text-uppercase font-weight-bolder border-danger">
-        Please enable Javascript to proceed
+    <noscript>
+        <div class="alert alert-warning text-center text-black text-uppercase font-weight-bolder border-danger">
+            Please enable Javascript to proceed
+        </div>
+    </noscript>
+
+    <div class="alert alert-info border-dark text-uppercase text-center font-weight-bold" id="info">
+        Loading Data. Please wait....
+
     </div>
-</noscript>
 
-<div class="alert alert-info border-dark text-uppercase text-center font-weight-bold" id="info">
-	Loading Data. Please wait....
-	
-</div>
-
-<div class="card-header py-3">
-<!-- Use to create dropdown list -->
-<div id="topics"></div>
-<button class="invisible btn btn btn-dark text-white" id="random-button"> <i class="fas fa-sync-alt"></i> Random</button>
-<button type="submit" onclick='exportToWord()' class="invisible btn btn btn-primary text-white" id="exportWord"> <i class="fas fa-file-word"></i> Worksheet</button>
+    <div class="card-header py-3">
+        <!-- Use to create dropdown list -->
+        <div id="topics"></div>
+        <button class="invisible btn btn btn-dark text-white" id="random-button"> <i class="fas fa-sync-alt"></i>
+            Random</button>
+        <button type="submit" onclick='exportToWord()' class="invisible btn btn btn-primary text-white" id="exportWord">
+            <i class="fas fa-file-word"></i> Worksheet</button>
 
 
-</div>
-<div class="card-body text-dark">
-	<div id="questions" class="questions"></div>
+    </div>
+    <div class="card-body text-dark">
+        <div id="questions" class="questions"></div>
 
-</div>
+    </div>
 </div>
 
 {% endblock content %}
@@ -57,18 +59,18 @@
 
 
 <script>
-    	$(document).ready(function(){
-		var apiOutput = null
-		$('#exportWord').hide();
-		$('#random-button').hide();
-		getQuestions("http://3.11.69.77:8000/api/v1/questions?subjectid={{subject}}")
-        console.log("Getting Questions from http://3.11.69.77:8000/api/v1/questions?subjectid={{subject}}"  )
-	})
+    $(document).ready(function () {
+        var apiOutput = null
+        $('#exportWord').hide();
+        $('#random-button').hide();
+        console.log("Getting Questions from http://127.0.0.1:8000/api/v1/questions?subjectid={{subject}}")
+        getQuestions("http://127.0.0.1:8000/api/v1/questions?subjectid={{subject}}")
+    })
 </script>
 
 
 {% verbatim %}
-<script id="topics-template" type="text/x-handlebars-template">		
+<script id="topics-template" type="text/x-handlebars-template">
 	<div class="form-group">
 		<label for="select-topics">Topic</label>
 	<select class="text-center form-control" id="select-topics">
@@ -129,187 +131,183 @@
 
 
 <script>
-	function exportToWord()
-{
-    const subject = (results[0]['subjectid']['subjectname'])
-    const topic = (results[0]['topicid']['topicname'])
+    function exportToWord() {
+        const subject = (results[0]['subjectid']['subjectname'])
+        const topic = (results[0]['topicid']['topicname'])
 
 
-    let doc = new docx.Document(
-    {
-        title: subject + ":" + topic + " Worksheet",
-        creator: "TeachingPeriodically",
-        title: subject + ":" + topic + " Worksheet",
-        description: "Exported Questions for " + topic,
-        subject: subject,
-        lastModifiedBy:
-        {% if user.is_authenticated %}
+        let doc = new docx.Document(
+            {
+                title: subject + ":" + topic + " Worksheet",
+                creator: "TeachingPeriodically",
+                title: subject + ":" + topic + " Worksheet",
+                description: "Exported Questions for " + topic,
+                subject: subject,
+                lastModifiedBy:
+                    {% if user.is_authenticated %}
         	"{{ request.user }}"
         {% else %}
-        	"Unknown"
-        {% endif %},
-        revision: 1,
+    "Unknown"
+    {% endif %},
+    revision: 1,
     })
 
     const mimeType =
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-	
 
 
-	const docTitle = 
-        	new docx.Paragraph({
-            	alignment: docx.AlignmentType.CENTER,
-				children: 
-				[new docx.TextRun({
-						text: subject + " Questions",
-						bold:true,
-						color: "black",						
-						size: 48,
-						font: "Calibri",
-						smallCaps: true,						
-					})
-				],
-        		})
 
-		const blankParagraph = new docx.Paragraph({
-    	text: "",
-		});
-
-		const topicParagraph = 
-        	new docx.Paragraph({
-            	alignment: docx.AlignmentType.CENTER,
-				children: 
-				[new docx.TextRun({
-						text: "Topic - " + topic,
-						bold:true,
-						color: "black",						
-						size: 28,
-						font: "Calibri",
-						smallCaps: true,						
-					})
-				],
-        		})
-
-				const pageBreak = new docx.Paragraph({
-    children: [new docx.PageBreak()],
-});
-
-
-    const rowWorksheet = results.map(function (result)
-    {
-        return new docx.TableRow(
-        {
-            children: [
-                new docx.TableCell(
-                {
-                    children: [new docx.Paragraph(result.questiontext)],
-                    width:
-                    {
-                        size: 40,
-                        type: docx.WidthType.PERCENTAGE,
-                    }
-                }),
-                new docx.TableCell(
-                {
-                    children: [],
-                    width:
-                    {
-                        size: 60,
-                        type: docx.WidthType.PERCENTAGE,
-                    }
-                }),
-            ],
+    const docTitle =
+        new docx.Paragraph({
+            alignment: docx.AlignmentType.CENTER,
+            children:
+                [new docx.TextRun({
+                    text: subject + " Questions",
+                    bold: true,
+                    color: "black",
+                    size: 48,
+                    font: "Calibri",
+                    smallCaps: true,
+                })
+                ],
         })
+
+    const blankParagraph = new docx.Paragraph({
+        text: "",
+    });
+
+    const topicParagraph =
+        new docx.Paragraph({
+            alignment: docx.AlignmentType.CENTER,
+            children:
+                [new docx.TextRun({
+                    text: "Topic - " + topic,
+                    bold: true,
+                    color: "black",
+                    size: 28,
+                    font: "Calibri",
+                    smallCaps: true,
+                })
+                ],
+        })
+
+    const pageBreak = new docx.Paragraph({
+        children: [new docx.PageBreak()],
+    });
+
+
+    const rowWorksheet = results.map(function (result) {
+        return new docx.TableRow(
+            {
+                children: [
+                    new docx.TableCell(
+                        {
+                            children: [new docx.Paragraph(result.questiontext)],
+                            width:
+                            {
+                                size: 40,
+                                type: docx.WidthType.PERCENTAGE,
+                            }
+                        }),
+                    new docx.TableCell(
+                        {
+                            children: [],
+                            width:
+                            {
+                                size: 60,
+                                type: docx.WidthType.PERCENTAGE,
+                            }
+                        }),
+                ],
+            })
     })
 
-{% if user.is_authenticated %}
-    const rowWorksheetAnswers = results.map(function (result)
-    {
+    {% if user.is_authenticated %}
+    const rowWorksheetAnswers = results.map(function (result) {
         return new docx.TableRow(
-        {
-            children: [
-                new docx.TableCell(
-                {
-                    children: [new docx.Paragraph(result.questiontext)],
-                    width:
-                    {
-                        size: 40,
-                        type: docx.WidthType.PERCENTAGE,
-                    }
-                }),
-                new docx.TableCell(
-                {
-                    children: [new docx.Paragraph(result.questionanswer)],
-                    width:
-                    {
-                        size: 60,
-                        type: docx.WidthType.PERCENTAGE,
-                    }
-                }),
-            ],
-        })
+            {
+                children: [
+                    new docx.TableCell(
+                        {
+                            children: [new docx.Paragraph(result.questiontext)],
+                            width:
+                            {
+                                size: 40,
+                                type: docx.WidthType.PERCENTAGE,
+                            }
+                        }),
+                    new docx.TableCell(
+                        {
+                            children: [new docx.Paragraph(result.questionanswer)],
+                            width:
+                            {
+                                size: 60,
+                                type: docx.WidthType.PERCENTAGE,
+                            }
+                        }),
+                ],
+            })
     })
-{% endif %}
+    {% endif %}
 
 
     const tableblank = new docx.Table(
-    {
-        margins:
         {
-            top: 250,
-            bottom: 250,
-            right: 200,
-            left: 100,
-        },
-		cantSplit: true,
-        rows: rowWorksheet,
+            margins:
+            {
+                top: 250,
+                bottom: 250,
+                right: 200,
+                left: 100,
+            },
+            cantSplit: true,
+            rows: rowWorksheet,
 
-    });
+        });
 
-{% if user.is_authenticated %}
-	const tableAnswers = new docx.Table(
-    {
-        margins:
+    {% if user.is_authenticated %}
+    const tableAnswers = new docx.Table(
         {
-            top: 250,
-            bottom: 250,
-            right: 200,
-            left: 100,
-        },
-		cantSplit: true,
-        rows: rowWorksheetAnswers,
+            margins:
+            {
+                top: 250,
+                bottom: 250,
+                right: 200,
+                left: 100,
+            },
+            cantSplit: true,
+            rows: rowWorksheetAnswers,
 
-    });
+        });
 
-{% endif %}
+    {% endif %}
 
     doc.addSection(
-    {
-        
-		footers: {
-			default: new docx.Footer({
+        {
 
-				children: [new docx.Paragraph("Downloaded from Teaching Periodically")]
-			})
+            footers: {
+                default: new docx.Footer({
 
-		},
-		children: [
-		
-            docTitle,
-			blankParagraph,
-			topicParagraph,
-            tableblank,
-			{% if user.is_authenticated %}
+                    children: [new docx.Paragraph("Downloaded from Teaching Periodically")]
+                })
+
+            },
+            children: [
+
+                docTitle,
+                blankParagraph,
+                topicParagraph,
+                tableblank,
+                {% if user.is_authenticated %}
 				pageBreak,
-				tableAnswers,
-			{% endif %}
+        tableAnswers,
+        {% endif %}
 			
         ],
     });
 
     docx.Packer.toBlob(doc)
-        .then(blob =>
-        {
+        .then(blob => {
             console.log(blob);
             saveAs(blob, subject + "_" + topic + "_worksheet.docx");
             console.log("Document created successfully");
