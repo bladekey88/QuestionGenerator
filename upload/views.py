@@ -45,7 +45,7 @@ class SignUpView(UserPassesTestMixin, CreateView):
     permission_denied_message = "You are already registered!"
 
     def test_func(self):
-        if self.request.user.is_anonymous == True:
+        if self.request.user.is_anonymous:
             return HttpResponse(self.request)
             return redirect("home/")
 

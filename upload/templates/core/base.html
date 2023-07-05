@@ -3,247 +3,258 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+  <head>
 
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <title>Question Generator | {% block title %}{% endblock title %}</title>
+    <title>Question Generator | {% block title %}{% endblock title %}</title>
 
-  <!-- Custom fonts for this template-->
-  <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %} " rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <!-- Custom fonts for this template-->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %} " rel="stylesheet" type="text/css">
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet">
 
-  <!-- Custom styles for this template-->
-  <link href="{% static '/css/sb-admin-2.min.css' %}" rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="{% static '/css/sb-admin-2.min.css' %}" rel="stylesheet">
 
-  <style>
-    .sidebar-custom {
-      background-color:#212529;
-    }
-    .bg-sidebar-gradient {
-    background-color: #212529;
-    background-image: linear-gradient(180deg, #212529 10%, #224abe 100%);
-    background-size: cover;
-}
+    <style>
+      .sidebar-custom {
+        background-color: #212529;
+      }
 
-
-.profile-name {
-  width:32px;
-  height:32px;
-  margin-right:8px;
-  border-radius:50%;
-  overflow:hidden;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background-color:#959eb0;
-  color:#fff
-}
+      .bg-sidebar-gradient {
+        background-color: #212529;
+        background-image: linear-gradient(180deg, #212529 10%, #224abe 100%);
+        background-size: cover;
+      }
 
 
+      .profile-name {
+        width: 32px;
+        height: 32px;
+        margin-right: 8px;
+        border-radius: 50%;
+        overflow: hidden;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #959eb0;
+        color: #fff
+      }
+    </style>
 
-  </style>
+    {% block customcss %} {% endblock customcss %}
 
-{% block customcss %} {% endblock customcss %}
+  </head>
 
-</head>
+  <body id="page-top">
 
-<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+      {% block navbar %}
 
-  <!-- Page Wrapper -->
-  <div id="wrapper">
-    {% block navbar %}
-    
-    {% block sidebar_content %}{% include "core/sidebar.html" %}{% endblock sidebar_content %}
-    
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+      {% block sidebar_content %}{% include "core/sidebar.html" %}{% endblock sidebar_content %}
 
-      <!-- Main Content -->
-      <div id="content">
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
 
-        <!-- Topbar -->
-        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+        <!-- Main Content -->
+        <div id="content">
 
-          <!-- Sidebar Toggle (Topbar) -->
-          <button id="sidebarToggleTop" class="btn btn-link  rounded-circle mr-3">
-            <i class="fa fa-bars"></i>
-          </button> 
+          <!-- Topbar -->
+          <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
-          <!-- Topbar Navbar -->
-          <ul class="navbar-nav ml-auto">
+            <!-- Sidebar Toggle (Topbar) -->
+            <button id="sidebarToggleTop" class="btn btn-link  rounded-circle mr-3">
+              <i class="fa fa-bars"></i>
+            </button>
 
-           
-
-            
-            {% if user.is_authenticated %} 
-                    {% if unread_messages >= 1 %}  
-                    <li class="nav-item mx-1">
-                        <div class=" d-none d-md-block alert alert-warning" role="alert" style="margin-top: 0.5rem;">
-
-                          <b>You have unread messages</b>
-                        </div>
-                      </li>
-                      {% endif %}
-
-
-                        <!-- Nav Item - Messages -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                          
-                          <a class="nav-link" href="{% url 'messaging:inbox' %}" id="messagesDropdown">
-                            <i class="fas fa-2x fa-envelope fa-fw"></i>
-                            <!-- Counter - Messages -->
-                            <span class="badge badge-danger badge-counter">{{unread_messages}}</span>
-                          </a>
-                          
-                        </li>
+            <!-- Topbar Navbar -->
+            <ul class="navbar-nav ml-auto">
 
 
 
 
+              {% if user.is_authenticated %}
+              {% if unread_messages >= 1 %}
+              <li class="nav-item mx-1">
+                <div class=" d-none d-md-block alert alert-warning" role="alert" style="margin-top: 0.5rem;">
+
+                  <b>You have unread messages</b>
+                </div>
+              </li>
+              {% endif %}
 
 
-            <!-- Nav Item - User Information -->
-            
-            <li class="nav-item dropdown no-arrow">
-              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <div class="profile-name">{{ user.first_name.0 }}{{user.last_name.0}}</div> <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{user.username|title}} ({{user.first_name}} {{user.last_name}})</span>
-                <!-- <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60"> -->
-              </a>
-              
-              <!-- Dropdown - User Information -->
-              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="{% url 'profile' pk=user.id %}">
-                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Profile
-                </a>   
-                <a class="dropdown-item" href="{% url 'change-password' %}">
-                  <i class="fas fa-key fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Change Password
-                </a>   
-                <a class="dropdown-item" href="{% url 'api:generate-api-key' %}">
-                  <i class="fab fa-keycdn fa-sm fa-fw mr-2 text-gray-400"></i>
-                  API Key
-                </a>            
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Logout
+              <!-- Nav Item - Messages -->
+              <li class="nav-item dropdown no-arrow mx-1">
+
+                <a class="nav-link" href="{% url 'messaging:inbox' %}" id="messagesDropdown">
+                  <i class="fas fa-2x fa-envelope fa-fw"></i>
+                  <!-- Counter - Messages -->
+                  <span class="badge badge-danger badge-counter">{{unread_messages}}</span>
                 </a>
-              </div>
-            </li>
-            {% else %}
-            
-           <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link text-primary" role="button" href="{% url 'login' %}" id="messagesDropdown">                          
-                <!-- <a role="button" class="nav-link dropdown-toggle" href=""> -->
+
+              </li>
+
+
+
+
+
+
+              <!-- Nav Item - User Information -->
+
+              <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  <div class="profile-name">{{ user.first_name.0 }}{{user.last_name.0}}</div> <span
+                    class="mr-2 d-none d-lg-inline text-gray-600 small">{{user.username|title}} ({{user.first_name}}
+                    {{user.last_name}})</span>
+                  <!-- <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60"> -->
+                </a>
+
+                <!-- Dropdown - User Information -->
+                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                  <a class="dropdown-item" href="{% url 'profile' pk=user.id %}">
+                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Profile
+                  </a>
+                  <a class="dropdown-item" href="{% url 'change-password' %}">
+                    <i class="fas fa-key fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Change Password
+                  </a>
+                  <a class="dropdown-item" href="{% url 'api:generate-api-key' %}">
+                    <i class="fab fa-keycdn fa-sm fa-fw mr-2 text-gray-400"></i>
+                    API Key
+                  </a>
+                  {% if request.user.is_superuser %}
+                  <a class="dropdown-item" href="{% url 'admin:index' %}">
+                    <i class="fas fa-user-shield fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Administration
+                  </a>
+                  {% endif %}
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Logout
+                  </a>
+                </div>
+              </li>
+              {% else %}
+
+              <li class="nav-item dropdown no-arrow mx-1">
+                <a class="nav-link text-primary" role="button" href="{% url 'login' %}" id="messagesDropdown">
+                  <!-- <a role="button" class="nav-link dropdown-toggle" href=""> -->
                   <i class="fas fa-sign-in-alt mr-2 text-blue-400"></i>
                   Login
                 </a>
-              <!-- </div> -->
-            </li>
-            {% endif %}
-          </ul>
+                <!-- </div> -->
+              </li>
+              {% endif %}
+            </ul>
 
-        </nav>
-        <!-- End of Topbar -->
-        {% endblock navbar %}
-        <!-- Begin Page Content -->
-        <div class="container-fluid">
-          {% comment %}
-          <div class="alert alert-secondary alert-dismissable show">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <i class="fa fa-info-circle"></i>  <strong>DEBUG MODE</strong> The site is currently running under <code>DEBUG_MODE</code>.
+          </nav>
+          <!-- End of Topbar -->
+          {% endblock navbar %}
+          <!-- Begin Page Content -->
+          <div class="container-fluid">
+            {% comment %}
+            <div class="alert alert-secondary alert-dismissable show">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <i class="fa fa-info-circle"></i> <strong>DEBUG MODE</strong> The site is currently running under
+              <code>DEBUG_MODE</code>.
+            </div>
+            {% endcomment %}
+
+            <!-- Page Heading -->
+            <h1 class="h3 mb-4 text-gray-800">{%block pageheading%}{%endblock pageheading%}</h1>
+            {% include 'core/messages.html' %}
+            {%block content%}
+            {%endblock content%}
           </div>
-          {% endcomment %}
-          
-          <!-- Page Heading -->
-          <h1 class="h3 mb-4 text-gray-800">{%block pageheading%}{%endblock pageheading%}</h1>
-          {% include 'core/messages.html' %}
-          {%block content%}
-          {%endblock content%}
+          <!-- /.container-fluid -->
+
         </div>
-        <!-- /.container-fluid -->
+        <!-- End of Main Content -->
+        {% block footer %}
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span>Copyright &copy; Teaching Periodically 2020</span>
+            </div>
+          </div>
+        </footer>
+        <!-- End of Footer -->
 
       </div>
-      <!-- End of Main Content -->
-      {% block footer %}
-      <!-- Footer -->
-      <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Teaching Periodically 2020</span>
-          </div>
-        </div>
-      </footer>
-      <!-- End of Footer -->
+      <!-- End of Content Wrapper -->
 
     </div>
-    <!-- End of Content Wrapper -->
+    <!-- End of Page Wrapper -->
 
-  </div>
-  <!-- End of Page Wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
 
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
-
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  {% endblock footer %}
-  <!-- Bootstrap core JavaScript-->
-  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    {% endblock footer %}
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
-  <!-- Core plugin JavaScript-->
-  <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
 
-  <!-- Custom scripts for all pages-->
-  <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
 
 
-  <script>
-  $(document).ready(function () {
-    var url = window.location;
-    $('.navbar-nav').find('.active').removeClass('active');
-    $('.navbar-nav li a').each(function () {
-        if (this.href == url) {
+    <script>
+      $(document).ready(function () {
+        var url = window.location;
+        $('.navbar-nav').find('.active').removeClass('active');
+        $('.navbar-nav li a').each(function () {
+          if (this.href == url) {
             $(this).parent().addClass('active');
             $(this).addClass('active');
             $(this).parent().parent().parent().addClass('active');
-        }
-    }); 
-});
-</script>
+          }
+        });
+      });
+    </script>
 
-  {% block footerjs %} {% endblock footerjs %}
+    {% block footerjs %} {% endblock footerjs %}
 
- 
 
- 
-</body>
+
+
+  </body>
 
 
 </html>

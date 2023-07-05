@@ -11,6 +11,7 @@ from .serializers import (
     LoginSerialiser,
 )
 from rest_framework import viewsets
+from rest_framework.throttling import UserRateThrottle
 from upload.models import Question, Topic, Subject, User
 from rest_framework import permissions
 from django.contrib.auth.models import Group
@@ -22,7 +23,6 @@ from knox.views import LoginView as KnoxLoginView
 from datetime import datetime
 from knox.models import AuthToken
 from django.contrib import messages
-import requests
 
 # Create your views here.
 
@@ -65,7 +65,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all().order_by(
         "subjectid__subjectname", "topicid__topicname"
     )
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
     filter_class = QuestionFilterSet
 
     def get_serializer_class(self):
@@ -124,6 +124,7 @@ class PurchaseList(generics.ListAPIView):
 
 class LoginView(KnoxLoginView):
     permission_classes = (permissions.AllowAny,)
+    throttle_classes = [UserRateThrottle]
 
     def post(self, request, format=None):
         serializer = LoginSerialiser(data=request.data)

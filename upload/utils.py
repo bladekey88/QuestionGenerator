@@ -16,9 +16,18 @@ def createTicketForSubjectDelete(subject, user):
     deletion_requested_by_user = requestExists(ticket_exists[1], user)
 
     if ticket_exists[0] is False:
-        raw_json = """{
-    "summary": "Subject Deletion Request: ID2",
-    "description": "Request by m.mcgonagall to delete the subject 'Chemistry' (id=2)",
+        raw_json = (
+            """{
+    "summary": "Subject Deletion Request: ID"""
+            + subjectid
+            + """",
+    "description": "Request by """
+            + username
+            + """ to delete the subject '"""
+            + subject
+            + """' (id="""
+            + subjectid
+            + """)",
     "additional_information": "More info about the issue",
     "project": {
         "id": 4,
@@ -64,6 +73,7 @@ def createTicketForSubjectDelete(subject, user):
         }
     ]
 }"""
+        )
         url = base_url
     elif deletion_requested_by_user is True:
         return None
@@ -113,7 +123,7 @@ def createTicketForTopicDelete(topic, user):
             + topicid
             + ')",\n "severity": {\n        "name": "major"\n    },\n "category": {\n    "name": "Feature Request"\n  },\n  "project": {\n    "name": "TeachingPeriodically"\n   },\n    "tags": [\n        {\n            "name": "API"\n        }\n    ]\n}'
         )
-        url = "https://www.teachingperiodically.com/tracking/api/rest/issues/"
+        url = base_url
     elif deletion_requested_by_user is True:
         return None
     else:
@@ -122,16 +132,19 @@ def createTicketForTopicDelete(topic, user):
             + username
             + '\'.",\n  "view_state": {\n  \t"name": "public"\n  }\n}'
         )
-        url = "https://www.teachingperiodically.com/tracking/api/rest/issues/{}/notes".format(
-            ticket_exists[1]
-        )
+        url = base_url + "{}/notes".format(ticket_exists[1])
 
     headers = {
         "Authorization": token,
         "Content-Type": "application/json",
     }
     response = request(
-        "POST", url, headers=headers, data=payload, allow_redirects=False
+        "POST",
+        url,
+        headers=headers,
+        data=payload,
+        allow_redirects=False,
+        verify=False,
     )
     return response.status_code
     # return response
@@ -151,15 +164,23 @@ def checkTicketExists(subjectid):
         verify=False,
     )
     issue_summary = {}
-    for issue in response.json()["issues"]:
-        issue_id = issue["id"]
-        issue_subject_id = issue["summary"].split(":")[1].strip()[2:]
-        issue_summary[issue_subject_id] = issue_id
+    try:
+        for issue in response.json()["issues"]:
+            issue_id = issue["id"]
+            issue_subject_id = issue["summary"].split(":")[1].strip()[2:]
+            issue_summary[issue_subject_id] = issue_id
 
-    if any(subjectid in x for x in issue_summary):
-        return True, issue_summary[subjectid]
-    else:
-        return False, 0
+        if any(subjectid in x for x in issue_summary):
+            return True, issue_summary[subjectid]
+        else:
+            return False, 0
+    except ValueError:
+        raise Exception(
+            """
+            Unable to retrieve content from tracking service.
+            Is LDAP connection established and site open?
+            """
+        )
 
 
 def requestExists(issueid, username):
